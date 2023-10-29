@@ -1,41 +1,49 @@
 {
   "name": "debugpy",
   "displayName": "Python Debugger",
-  "description": "Python Debugger extension using `debugpy`.",
   "version": "0.0.1",
-  "publisher": "ms-python",
-  "enabledApiProposals": [
-    "portsAttributes"
+  "private": "false",
+  "description": "Python Debugger extension using `debugpy`.",
+  "categories": [
+    "Debuggers"
   ],
-  "license": "MIT",
-  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
-  },
-  "bugs": {
-    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
-  },
-  "icon": "icon.png",
   "keywords": [
     "python",
     "debugger",
     "debugpy"
   ],
-  "engines": {
-    "vscode": "1.78.0"
+  "homepage": "https://github.com/CodeEditorLand/CodeEditorLand#readme",
+  "bugs": {
+    "url": "https://github.com/CodeEditorLand/CodeEditorLand/issues"
   },
-  "categories": [
-    "Debuggers"
-  ],
-  "activationEvents": [
-    "onDebugInitialConfigurations",
-    "onDebugDynamicConfigurations:debugpy",
-    "onDebugResolve:debugpy",
-    "onLanguage:python"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodeEditorLand/CodeEditorLand.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Nikola Hristov",
+    "email": "nikola@nikolahristov.tech",
+    "url": "https://nikolahristov.tech"
+  },
+  "publisher": "playform",
+  "type": "module",
   "main": "./dist/extension.js",
-  "l10n": "./l10n",
+  "scripts": {
+    "compile": "webpack",
+    "compile-tests": "tsc -p . --outDir out",
+    "format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
+    "format-fix": "prettier --write 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
+    "lint": "eslint src --ext ts",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js",
+    "vsce-package": "vsce package -o pyhton-debugger.vsix",
+    "vscode:prepublish": "npm run package",
+    "watch": "webpack --watch",
+    "watch-tests": "tsc -p . -w --outDir out"
+  },
   "contributes": {
     "commands": [
       {
@@ -59,26 +67,6 @@
         "title": "%debugpy.command.viewOutput.title%"
       }
     ],
-    "menus": {
-      "commandPalette": [
-        {
-          "category": "Python Debugger",
-          "command": "debugpy.clearCacheAndReload",
-          "title": "%debugpy.command.clearCacheAndReload.title%"
-        },
-        {
-          "category": "Python Debugger",
-          "command": "debugpy.debugInTerminal",
-          "icon": "$(debug-alt)",
-          "title": "%debugpy.command.debugInTerminal.title%"
-        },
-        {
-          "category": "Python Debugger",
-          "command": "debugpy.viewOutput",
-          "title": "%debugpy.command.viewOutput.title%"
-        }
-      ]
-    },
     "configuration": {
       "properties": {
         "debugpy.debugJustMyCode": {
@@ -445,22 +433,45 @@
         },
         "when": "!virtualWorkspace && shellExecutionSupported"
       }
-    ]
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "category": "Python Debugger",
+          "command": "debugpy.clearCacheAndReload",
+          "title": "%debugpy.command.clearCacheAndReload.title%"
+        },
+        {
+          "category": "Python Debugger",
+          "command": "debugpy.debugInTerminal",
+          "icon": "$(debug-alt)",
+          "title": "%debugpy.command.debugInTerminal.title%"
+        },
+        {
+          "category": "Python Debugger",
+          "command": "debugpy.viewOutput",
+          "title": "%debugpy.command.viewOutput.title%"
+        }
+      ]
+    }
   },
-  "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "format-check": "prettier --check 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
-    "format-fix": "prettier --write 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
-    "test": "node ./out/test/runTest.js",
-    "vsce-package": "vsce package -o pyhton-debugger.vsix",
-    "prepublishOnly": "TypeScriptESBuild Source/**/*.ts"
+  "activationEvents": [
+    "onDebugInitialConfigurations",
+    "onDebugDynamicConfigurations:debugpy",
+    "onDebugResolve:debugpy",
+    "onLanguage:python"
+  ],
+  "dependencies": {
+    "@vscode/extension-telemetry": "0.8.5",
+    "fs-extra": "11.1.1",
+    "iconv-lite": "0.6.3",
+    "inversify": "6.0.2",
+    "jsonc-parser": "3.2.0",
+    "lodash": "4.17.21",
+    "reflect-metadata": "0.1.13",
+    "vscode-debugadapter": "1.51.0",
+    "vscode-debugprotocol": "1.51.0",
+    "vscode-languageclient": "9.0.1"
   },
   "devDependencies": {
     "@types/chai": "4.3.9",
@@ -490,31 +501,20 @@
     "ts-mockito": "2.6.1",
     "typemoq": "2.1.0",
     "typescript": "5.2.2",
+    "typescript-esbuild": "0.3.1",
     "vscode-test": "1.6.1",
     "webpack": "5.89.0",
-    "webpack-cli": "5.1.4",
-    "typescript-esbuild": "0.3.1"
+    "webpack-cli": "5.1.4"
   },
-  "dependencies": {
-    "@vscode/extension-telemetry": "0.8.5",
-    "fs-extra": "11.1.1",
-    "iconv-lite": "0.6.3",
-    "inversify": "6.0.2",
-    "jsonc-parser": "3.2.0",
-    "lodash": "4.17.21",
-    "reflect-metadata": "0.1.13",
-    "vscode-debugadapter": "1.51.0",
-    "vscode-debugprotocol": "1.51.0",
-    "vscode-languageclient": "9.0.1"
+  "engines": {
+    "vscode": "1.78.0"
   },
-  "type": "module",
-  "private": "false",
   "publishConfig": {
     "access": "public"
   },
-  "author": {
-    "name": "Nikola Hristov",
-    "email": "nikola@nikolahristov.tech",
-    "url": "https://nikolahristov.tech"
-  }
+  "icon": "icon.png",
+  "enabledApiProposals": [
+    "portsAttributes"
+  ],
+  "l10n": "./l10n"
 }
