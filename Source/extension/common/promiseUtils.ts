@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 export function ignoreErrors<T>(promise: Promise<T>) {
-    return promise.catch(() => {});
+	return promise.catch(() => {});
 }
 
 // if (!String.prototype.format) {
