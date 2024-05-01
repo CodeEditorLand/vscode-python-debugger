@@ -1,36 +1,17 @@
 {
-	"name": "debugpy",
-	"displayName": "Python Debugger",
-	"version": "0.0.1",
-	"private": false,
-	"description": "Python Debugger extension using debugpy.",
-	"keywords": [
-		"land"
+	"activationEvents": [
+		"onDebugInitialConfigurations",
+		"onDebugDynamicConfigurations:debugpy",
+		"onDebugResolve:debugpy",
+		"onLanguage:python"
 	],
-	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandPythonDebugger#readme",
-	"bugs": {
-		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandPythonDebugger/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+HTTPS://github.com/CodeEditorLand/LandPythonDebugger.git"
-	},
-	"license": "SEE LICENSE IN LICENSE",
 	"author": {
-		"name": "🌆 — Land —",
 		"email": "Land@PlayForm.Cloud",
+		"name": "🌆 — Land —",
 		"url": "HTTPS://Land.PlayForm.Cloud"
 	},
-	"type": "module",
-	"main": "./dist/extension.js",
-	"scripts": {
-		"Document": "Document 'Source/**/*.ts'",
-		"compile": "webpack",
-		"compile-tests": "tsc -p . --outDir out",
-		"format-fix": "prettier --write 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
-		"prepublishOnly": "Build 'Source/**/*.ts'",
-		"vsce-package": "npx @vscode/vsce package -o python-debugger.vsix",
-		"watch-tests": "tsc -p . -w --outDir out"
+	"bugs": {
+		"url": "HTTPS://GitHub.Com/CodeEditorLand/LandPythonDebugger/issues"
 	},
 	"contributes": {
 		"commands": [
@@ -517,12 +498,6 @@
 			]
 		}
 	},
-	"activationEvents": [
-		"onDebugInitialConfigurations",
-		"onDebugDynamicConfigurations:debugpy",
-		"onDebugResolve:debugpy",
-		"onLanguage:python"
-	],
 	"dependencies": {
 		"fs-extra": "11.2.0",
 		"iconv-lite": "0.6.3",
@@ -531,6 +506,7 @@
 		"lodash": "4.17.21",
 		"reflect-metadata": "0.2.2"
 	},
+	"description": "Python Debugger extension using debugpy.",
 	"devDependencies": {
 		"@playform/build": "0.0.7",
 		"@playform/document": "0.0.6",
@@ -552,17 +528,41 @@
 		"ts-mockito": "2.6.1",
 		"typemoq": "2.1.0"
 	},
-	"extensionDependencies": [
-		"ms-python.python"
-	],
-	"publishConfig": {
-		"access": "public"
-	},
-	"icon": "icon.png",
+	"displayName": "Python Debugger",
 	"enabledApiProposals": [
 		"portsAttributes",
 		"contribIssueReporter",
 		"debugVisualization"
 	],
-	"l10n": "./l10n"
+	"extensionDependencies": [
+		"ms-python.python"
+	],
+	"homepage": "HTTPS://GitHub.Com/CodeEditorLand/LandPythonDebugger#readme",
+	"icon": "icon.png",
+	"keywords": [
+		"land"
+	],
+	"l10n": "./l10n",
+	"license": "SEE LICENSE IN LICENSE",
+	"main": "./dist/extension.js",
+	"name": "debugpy",
+	"private": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/LandPythonDebugger.git"
+	},
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"compile": "webpack",
+		"compile-tests": "tsc -p . --outDir out",
+		"format-fix": "prettier --write 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
+		"prepublishOnly": "Build 'Source/**/*.ts'",
+		"vsce-package": "npx @vscode/vsce package -o python-debugger.vsix",
+		"watch-tests": "tsc -p . -w --outDir out"
+	},
+	"type": "module",
+	"version": "0.0.1"
 }
