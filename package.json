@@ -520,7 +520,7 @@
 		"@types/sinon": "17.0.3",
 		"chai": "5.1.1",
 		"chai-as-promised": "7.1.2",
-		"glob": "10.3.16",
+		"glob": "10.4.1",
 		"rewiremock": "3.14.5",
 		"semver": "7.6.2",
 		"sinon": "18.0.0",
