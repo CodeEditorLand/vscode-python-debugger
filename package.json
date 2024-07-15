@@ -1,10 +1,15 @@
 {
-	"activationEvents": [
-		"onDebugInitialConfigurations",
-		"onDebugDynamicConfigurations:debugpy",
-		"onDebugResolve:debugpy",
-		"onLanguage:python"
-	],
+	"name": "debugpy",
+	"displayName": "Python Debugger",
+	"description": "Python Debugger extension using debugpy.",
+	"main": "./dist/extension.js",
+	"scripts": {
+		"compile": "webpack",
+		"compile-tests": "tsc -p . --outDir out",
+		"format-fix": "prettier --write 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
+		"vsce-package": "npx @vscode/vsce package -o python-debugger.vsix",
+		"watch-tests": "tsc -p . -w --outDir out"
+	},
 	"contributes": {
 		"commands": [
 			{
@@ -490,6 +495,12 @@
 			]
 		}
 	},
+	"activationEvents": [
+		"onDebugInitialConfigurations",
+		"onDebugDynamicConfigurations:debugpy",
+		"onDebugResolve:debugpy",
+		"onLanguage:python"
+	],
 	"dependencies": {
 		"fs-extra": "^11.2.0",
 		"iconv-lite": "^0.6.3",
@@ -498,7 +509,6 @@
 		"lodash": "^4.17.21",
 		"reflect-metadata": "^0.1.13"
 	},
-	"description": "Python Debugger extension using debugpy.",
 	"devDependencies": {
 		"@types/chai": "^4.3.4",
 		"@types/chai-as-promised": "^7.1.8",
@@ -517,24 +527,14 @@
 		"ts-mockito": "^2.6.1",
 		"typemoq": "^2.1.0"
 	},
-	"displayName": "Python Debugger",
+	"extensionDependencies": [
+		"ms-python.python"
+	],
+	"icon": "icon.png",
 	"enabledApiProposals": [
 		"portsAttributes",
 		"contribIssueReporter",
 		"debugVisualization"
 	],
-	"extensionDependencies": [
-		"ms-python.python"
-	],
-	"icon": "icon.png",
-	"l10n": "./l10n",
-	"main": "./dist/extension.js",
-	"name": "debugpy",
-	"scripts": {
-		"compile": "webpack",
-		"compile-tests": "tsc -p . --outDir out",
-		"format-fix": "prettier --write 'src/**/*.ts' 'build/**/*.yml' '.github/**/*.yml'",
-		"vsce-package": "npx @vscode/vsce package -o python-debugger.vsix",
-		"watch-tests": "tsc -p . -w --outDir out"
-	}
+	"l10n": "./l10n"
 }
