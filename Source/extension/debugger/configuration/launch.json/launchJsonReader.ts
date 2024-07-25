@@ -13,7 +13,7 @@ export async function getConfigurationsForWorkspace(workspace: WorkspaceFolder):
     const filename = path.join(workspace.uri.fsPath, '.vscode', 'launch.json');
     if (!(await fs.pathExists(filename))) {
         // Check launch config in the workspace file
-        const codeWorkspaceConfig = getConfiguration('launch', workspace);
+        const codeWorkspaceConfig = getConfiguration('launch');
         if (!codeWorkspaceConfig.configurations || !Array.isArray(codeWorkspaceConfig.configurations)) {
             return [];
         }
