@@ -142,7 +142,6 @@ export async function registerDebugger(context: IExtensionContext): Promise<IExt
     context.subscriptions.push(
         debug.registerDebugAdapterDescriptorFactory(DebuggerTypeName, debugAdapterDescriptorFactory),
     );
-
     context.subscriptions.push(
         debug.onDidStartDebugSession((debugSession) => {
             const shouldTerminalFocusOnStart = getConfiguration('python', debugSession.workspaceFolder?.uri)?.terminal
@@ -239,12 +238,6 @@ export async function registerDebugger(context: IExtensionContext): Promise<IExt
                 return [v];
             },
         }),
-    );
-
-    executeCommand(
-        'setContext',
-        'dynamicPythonConfigAvailable',
-        window.activeTextEditor?.document.languageId === 'python',
     );
 
     return buildApi();

@@ -128,7 +128,3 @@ export function startDebugging(
 ) {
     debug.startDebugging(folder, nameOrConfiguration, parentSession);
 }
-
-export function customRequest(command: string, args?: any): any {
-    return debug.activeDebugSession?.customRequest(command, args);
-}
