@@ -42,7 +42,7 @@ The main intent of this extension is to offer:
    own, and we will transition all debugging support to this extension for all
    debugging functionality.
 
-## Usage
+## 🛠️ Usage
 
 Once installed in Visual Studio Code, python-debugger will be automatically
 activated when you open a Python file.
