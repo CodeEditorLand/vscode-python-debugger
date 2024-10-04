@@ -1,10 +1,10 @@
 // import '../../common/extensions';
 
-import { isTestExecution } from '../constants';
-import { traceError, traceVerbose } from '../log/logging';
-import { ignoreErrors } from '../promiseUtils';
-import { getCacheKeyFromFunctionArgs, getGlobalCacheStore } from './cacheUtils';
-import { StopWatch } from './stopWatch';
+import { isTestExecution } from "../constants";
+import { traceError, traceVerbose } from "../log/logging";
+import { ignoreErrors } from "../promiseUtils";
+import { getCacheKeyFromFunctionArgs, getGlobalCacheStore } from "./cacheUtils";
+import { StopWatch } from "./stopWatch";
 
 /**
  * Swallows exceptions thrown by a function. Function must return either a void or a promise that resolves to a void.
@@ -14,31 +14,39 @@ import { StopWatch } from './stopWatch';
  * @returns void
  */
 export function swallowExceptions(scopeName?: string) {
-    return function (_target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>) {
-        const originalMethod = descriptor.value!;
-        const errorMessage = `Python Extension (Error in ${scopeName || propertyName}, method:${propertyName}):`;
+	return function (
+		_target: any,
+		propertyName: string,
+		descriptor: TypedPropertyDescriptor<any>,
+	) {
+		const originalMethod = descriptor.value!;
+		const errorMessage = `Python Extension (Error in ${scopeName || propertyName}, method:${propertyName}):`;
 
-        descriptor.value = function (...args: any[]) {
-            try {
-                const result = originalMethod.apply(this, args);
+		descriptor.value = function (...args: any[]) {
+			try {
+				const result = originalMethod.apply(this, args);
 
-                // If method being wrapped returns a promise then wait and swallow errors.
-                if (result && typeof result.then === 'function' && typeof result.catch === 'function') {
-                    return (result as Promise<void>).catch((error) => {
-                        if (isTestExecution()) {
-                            return;
-                        }
-                        traceError(errorMessage, error);
-                    });
-                }
-            } catch (error) {
-                if (isTestExecution()) {
-                    return;
-                }
-                traceError(errorMessage, error);
-            }
-        };
-    };
+				// If method being wrapped returns a promise then wait and swallow errors.
+				if (
+					result &&
+					typeof result.then === "function" &&
+					typeof result.catch === "function"
+				) {
+					return (result as Promise<void>).catch((error) => {
+						if (isTestExecution()) {
+							return;
+						}
+						traceError(errorMessage, error);
+					});
+				}
+			} catch (error) {
+				if (isTestExecution()) {
+					return;
+				}
+				traceError(errorMessage, error);
+			}
+		};
+	};
 }
 
 type PromiseFunctionWithAnyArgs = (...any: any) => Promise<any>;
@@ -63,46 +71,67 @@ const moduleLoadWatch = new StopWatch();
  * @param expiryDurationAfterStartUpMs If specified, this is the duration to cache the result for after extension startup (until extension is likely to
  * keep running commands in background)
  */
-export function cache(expiryDurationMs: number, cachePromise = false, expiryDurationAfterStartUpMs?: number) {
-    return function (
-        target: Object,
-        propertyName: string,
-        descriptor: TypedPropertyDescriptor<PromiseFunctionWithAnyArgs>,
-    ) {
-        const originalMethod = descriptor.value!;
-        const className = 'constructor' in target && target.constructor.name ? target.constructor.name : '';
-        const keyPrefix = `Cache_Method_Output_${className}.${propertyName}`;
-        descriptor.value = async function (...args: any) {
-            if (isTestExecution()) {
-                return originalMethod.apply(this, args) as Promise<any>;
-            }
-            let key: string;
-            try {
-                key = getCacheKeyFromFunctionArgs(keyPrefix, args);
-            } catch (ex) {
-                traceError('Error while creating key for keyPrefix:', keyPrefix, ex);
-                return originalMethod.apply(this, args) as Promise<any>;
-            }
-            const cachedItem = cacheStoreForMethods.get(key);
-            if (cachedItem && (cachedItem.expiry > Date.now() || expiryDurationMs === -1)) {
-                traceVerbose(`Cached data exists ${key}`);
-                return Promise.resolve(cachedItem.data);
-            }
-            const expiryMs =
-                expiryDurationAfterStartUpMs && moduleLoadWatch.elapsedTime > extensionStartUpTime
-                    ? expiryDurationAfterStartUpMs
-                    : expiryDurationMs;
-            const promise = originalMethod.apply(this, args) as Promise<any>;
-            if (cachePromise) {
-                cacheStoreForMethods.set(key, { data: promise, expiry: Date.now() + expiryMs });
-            } else {
-                ignoreErrors(
-                    promise.then((result) =>
-                        cacheStoreForMethods.set(key, { data: result, expiry: Date.now() + expiryMs }),
-                    ),
-                );
-            }
-            return promise;
-        };
-    };
+export function cache(
+	expiryDurationMs: number,
+	cachePromise = false,
+	expiryDurationAfterStartUpMs?: number,
+) {
+	return function (
+		target: Object,
+		propertyName: string,
+		descriptor: TypedPropertyDescriptor<PromiseFunctionWithAnyArgs>,
+	) {
+		const originalMethod = descriptor.value!;
+		const className =
+			"constructor" in target && target.constructor.name
+				? target.constructor.name
+				: "";
+		const keyPrefix = `Cache_Method_Output_${className}.${propertyName}`;
+		descriptor.value = async function (...args: any) {
+			if (isTestExecution()) {
+				return originalMethod.apply(this, args) as Promise<any>;
+			}
+			let key: string;
+			try {
+				key = getCacheKeyFromFunctionArgs(keyPrefix, args);
+			} catch (ex) {
+				traceError(
+					"Error while creating key for keyPrefix:",
+					keyPrefix,
+					ex,
+				);
+				return originalMethod.apply(this, args) as Promise<any>;
+			}
+			const cachedItem = cacheStoreForMethods.get(key);
+			if (
+				cachedItem &&
+				(cachedItem.expiry > Date.now() || expiryDurationMs === -1)
+			) {
+				traceVerbose(`Cached data exists ${key}`);
+				return Promise.resolve(cachedItem.data);
+			}
+			const expiryMs =
+				expiryDurationAfterStartUpMs &&
+				moduleLoadWatch.elapsedTime > extensionStartUpTime
+					? expiryDurationAfterStartUpMs
+					: expiryDurationMs;
+			const promise = originalMethod.apply(this, args) as Promise<any>;
+			if (cachePromise) {
+				cacheStoreForMethods.set(key, {
+					data: promise,
+					expiry: Date.now() + expiryMs,
+				});
+			} else {
+				ignoreErrors(
+					promise.then((result) =>
+						cacheStoreForMethods.set(key, {
+							data: result,
+							expiry: Date.now() + expiryMs,
+						}),
+					),
+				);
+			}
+			return promise;
+		};
+	};
 }
