@@ -520,7 +520,7 @@
 		"@types/chai-as-promised": "8.0.1",
 		"@types/fs-extra": "11.0.4",
 		"@types/glob": "8.1.0",
-		"@types/lodash": "4.17.9",
+		"@types/lodash": "4.17.10",
 		"@types/node": "22.x",
 		"@types/semver": "7.5.8",
 		"@types/sinon": "17.0.3",
