@@ -1,4 +1,5 @@
 <!-- Please fill in all XXX markers -->
+
 # Behaviour
 
 XXX
@@ -12,7 +13,9 @@ XXX
 -->
 
 <!-- **NOTE**: Please do provide logs from the Python and Python Debugger Output panel. -->
+
 # Diagnostic data
+
 <details>
 
 <summary><code>launch.json</code> configuration
