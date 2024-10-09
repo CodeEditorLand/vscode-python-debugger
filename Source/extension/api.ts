@@ -1,30 +1,33 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-'use strict';
+"use strict";
 
-import { IExtensionApi } from './apiTypes';
-import { getDebugpyLauncherArgs, getDebugpyPackagePath } from './debugger/adapter/remoteLaunchers';
+import { IExtensionApi } from "./apiTypes";
+import {
+	getDebugpyLauncherArgs,
+	getDebugpyPackagePath,
+} from "./debugger/adapter/remoteLaunchers";
 
 export function buildApi(): IExtensionApi {
-    const api: IExtensionApi = {
-        debug: {
-            async getRemoteLauncherCommand(
-                host: string,
-                port: number,
-                waitUntilDebuggerAttaches: boolean = true,
-            ): Promise<string[]> {
-                return getDebugpyLauncherArgs({
-                    host,
-                    port,
-                    waitUntilDebuggerAttaches,
-                });
-            },
-            async getDebuggerPackagePath(): Promise<string> {
-                return getDebugpyPackagePath();
-            },
-        },
-    };
+	const api: IExtensionApi = {
+		debug: {
+			async getRemoteLauncherCommand(
+				host: string,
+				port: number,
+				waitUntilDebuggerAttaches: boolean = true,
+			): Promise<string[]> {
+				return getDebugpyLauncherArgs({
+					host,
+					port,
+					waitUntilDebuggerAttaches,
+				});
+			},
+			async getDebuggerPackagePath(): Promise<string> {
+				return getDebugpyPackagePath();
+			},
+		},
+	};
 
-    return api;
+	return api;
 }
