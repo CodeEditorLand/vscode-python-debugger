@@ -1,22 +1,24 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-'use strict';
+"use strict";
 
-import { CancellationToken, DebugConfiguration, WorkspaceFolder } from 'vscode';
+import { CancellationToken, DebugConfiguration, WorkspaceFolder } from "vscode";
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export const IDebugConfigurationResolver = Symbol('IDebugConfigurationResolver');
+export const IDebugConfigurationResolver = Symbol(
+	"IDebugConfigurationResolver",
+);
 export interface IDebugConfigurationResolver<T extends DebugConfiguration> {
-    resolveDebugConfiguration(
-        folder: WorkspaceFolder | undefined,
-        debugConfiguration: T,
-        token?: CancellationToken,
-    ): Promise<T | undefined>;
+	resolveDebugConfiguration(
+		folder: WorkspaceFolder | undefined,
+		debugConfiguration: T,
+		token?: CancellationToken,
+	): Promise<T | undefined>;
 
-    resolveDebugConfigurationWithSubstitutedVariables(
-        folder: WorkspaceFolder | undefined,
-        debugConfiguration: T,
-        token?: CancellationToken,
-    ): Promise<T | undefined>;
+	resolveDebugConfigurationWithSubstitutedVariables(
+		folder: WorkspaceFolder | undefined,
+		debugConfiguration: T,
+		token?: CancellationToken,
+	): Promise<T | undefined>;
 }

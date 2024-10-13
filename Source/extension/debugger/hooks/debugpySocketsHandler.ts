@@ -1,16 +1,17 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-'use strict';
+"use strict";
 
-import { inject, injectable } from 'inversify';
-import { DebugSessionCustomEvent } from 'vscode';
-import { swallowExceptions } from '../../common/utils/decorators';
-import { DebuggerEvents } from './constants';
-import { DebuggerTypeName } from '../../constants';
-import { DebugPortAttributesProvider } from '../debugPort/portAttributesProvider';
-import { IDebugSessionEventHandlers } from './types';
-import { traceLog } from '../../common/log/logging';
+import { inject, injectable } from "inversify";
+import { DebugSessionCustomEvent } from "vscode";
+
+import { traceLog } from "../../common/log/logging";
+import { swallowExceptions } from "../../common/utils/decorators";
+import { DebuggerTypeName } from "../../constants";
+import { DebugPortAttributesProvider } from "../debugPort/portAttributesProvider";
+import { DebuggerEvents } from "./constants";
+import { IDebugSessionEventHandlers } from "./types";
 
 /**
  * This class is responsible for register ports using by debugpy in the portProvider.
@@ -20,26 +21,33 @@ import { traceLog } from '../../common/log/logging';
  */
 @injectable()
 export class DebugpySocketsHandler implements IDebugSessionEventHandlers {
-    constructor(
-        @inject(DebugPortAttributesProvider) private readonly debugPortAttributesProvider: DebugPortAttributesProvider,
-    ) {}
+	constructor(
+		@inject(DebugPortAttributesProvider)
+		private readonly debugPortAttributesProvider: DebugPortAttributesProvider,
+	) {}
 
-    @swallowExceptions('Handle child process launch')
-    public async handleCustomEvent(event: DebugSessionCustomEvent): Promise<void> {
-        if (!event || event.session.configuration.type !== DebuggerTypeName) {
-            return;
-        }
+	@swallowExceptions("Handle child process launch")
+	public async handleCustomEvent(
+		event: DebugSessionCustomEvent,
+	): Promise<void> {
+		if (!event || event.session.configuration.type !== DebuggerTypeName) {
+			return;
+		}
 
-        if (event.event === DebuggerEvents.DebugpySockets) {
-            traceLog("Received 'debugpySockets' event from debugpy.");
-            let portSocket = event.body.sockets.find((socket: { [x: string]: any }) => {
-                return socket['internal'] === false;
-            });
-            if (portSocket !== undefined) {
-                this.debugPortAttributesProvider.setPortAttribute(portSocket.port);
-            }
-        } else {
-            return;
-        }
-    }
+		if (event.event === DebuggerEvents.DebugpySockets) {
+			traceLog("Received 'debugpySockets' event from debugpy.");
+			let portSocket = event.body.sockets.find(
+				(socket: { [x: string]: any }) => {
+					return socket["internal"] === false;
+				},
+			);
+			if (portSocket !== undefined) {
+				this.debugPortAttributesProvider.setPortAttribute(
+					portSocket.port,
+				);
+			}
+		} else {
+			return;
+		}
+	}
 }
