@@ -516,7 +516,7 @@
 	},
 	"description": "Python Debugger extension using debugpy.",
 	"devDependencies": {
-		"@types/chai": "5.0.0",
+		"@types/chai": "5.0.1",
 		"@types/chai-as-promised": "8.0.1",
 		"@types/fs-extra": "11.0.4",
 		"@types/glob": "8.1.0",
