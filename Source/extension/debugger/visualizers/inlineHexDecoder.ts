@@ -7,6 +7,7 @@ export function registerHexDebugVisualizationTreeProvider() {
 	return {
 		getTreeItem(context: DebugVisualizationContext) {
 			const decoded = `0x${Number(context.variable.value).toString(16)}`;
+
 			return {
 				label: context.variable.name.toString(),
 				description: decoded.toString(),

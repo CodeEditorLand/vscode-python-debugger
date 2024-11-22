@@ -16,10 +16,13 @@ export async function getConfigurationsForWorkspace(
 	workspace: WorkspaceFolder,
 ): Promise<DebugConfiguration[]> {
 	traceLog("Getting configurations for workspace");
+
 	const filename = path.join(workspace.uri.fsPath, ".vscode", "launch.json");
+
 	if (!(await fs.pathExists(filename))) {
 		// Check launch config in the workspace file
 		const codeWorkspaceConfig = getConfiguration("launch", workspace);
+
 		if (
 			!codeWorkspaceConfig.configurations ||
 			!Array.isArray(codeWorkspaceConfig.configurations)
@@ -27,14 +30,17 @@ export async function getConfigurationsForWorkspace(
 			return [];
 		}
 		traceLog("Using configuration in workspace");
+
 		return codeWorkspaceConfig.configurations;
 	}
 
 	const text = await fs.readFile(filename, "utf-8");
+
 	const parsed = parse(text, [], {
 		allowTrailingComma: true,
 		disallowComments: false,
 	});
+
 	if (!parsed.configurations || !Array.isArray(parsed.configurations)) {
 		throw Error("Missing field in launch.json: configurations");
 	}
@@ -42,6 +48,7 @@ export async function getConfigurationsForWorkspace(
 		throw Error("Missing field in launch.json: version");
 	}
 	traceLog("Using configuration in launch.json");
+
 	return parsed.configurations;
 }
 
@@ -50,6 +57,7 @@ export async function getConfigurationsByUri(
 ): Promise<DebugConfiguration[]> {
 	if (uri) {
 		const workspace = getWorkspaceFolder(uri);
+
 		if (workspace) {
 			return getConfigurationsForWorkspace(workspace);
 		}

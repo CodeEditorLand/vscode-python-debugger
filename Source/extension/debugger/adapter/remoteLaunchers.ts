@@ -11,6 +11,7 @@ import { EXTENSION_ROOT_DIR } from "../../common/constants";
 import { fileToCommandArgumentForPythonExt } from "../../common/stringUtils";
 
 const pathToPythonLibDir = path.join(EXTENSION_ROOT_DIR, "bundled", "libs");
+
 const pathToDebugger = path.join(pathToPythonLibDir, "debugpy");
 
 type RemoteDebugOptions = {
@@ -26,6 +27,7 @@ export function getDebugpyLauncherArgs(
 	const waitArgs = options.waitUntilDebuggerAttaches
 		? ["--wait-for-client"]
 		: [];
+
 	return [
 		fileToCommandArgumentForPythonExt(debuggerPath),
 		"--listen",

@@ -57,12 +57,14 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
                         configuration.connect.port
                     }`,
                 );
+
                 return new DebugAdapterServer(
                     Number(configuration.connect.port),
                     configuration.connect.host ?? '127.0.0.1',
                 );
             } else if (configuration.port !== undefined) {
                 traceLog(`Connecting to DAP Server at:  ${configuration.host ?? '127.0.0.1'}:${configuration.port}`);
+
                 return new DebugAdapterServer(Number(configuration.port), configuration.host ?? '127.0.0.1');
             } else if (configuration.listen === undefined && configuration.processId === undefined) {
                 throw new Error('"request":"attach" requires either "connect", "listen", or "processId"');
@@ -70,6 +72,7 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
         }
 
         const command = await this.getDebugAdapterPython(configuration, session.workspaceFolder);
+
         if (command.length !== 0) {
             if (configuration.request === 'attach' && configuration.processId !== undefined) {
                 sendTelemetryEvent(EventName.DEBUGGER_ATTACH_TO_LOCAL_PROCESS);
@@ -85,6 +88,7 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
                 const args = command.concat([configuration.debugAdapterPath, ...logArgs]);
                 traceLog(`DAP Server launched with command: ${executable} ${args.join(' ')}`);
                 executable = fileToCommandArgumentForPythonExt(executable);
+
                 return new DebugAdapterExecutable(executable, args);
             }
 
@@ -93,6 +97,7 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
             const args = command.concat([debuggerAdapterPathToUse, ...logArgs]);
             traceLog(`DAP Server launched with command: ${executable} ${args.join(' ')}`);
             sendTelemetryEvent(EventName.DEBUG_ADAPTER_USING_WHEELS_PATH, undefined, { usingWheels: true });
+
             return new DebugAdapterExecutable(executable, args);
         } else {
             throw new Error(DebugConfigStrings.debugStopped);
@@ -126,10 +131,12 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
 
         if (interpreter?.path) {
             traceVerbose(`Selecting active interpreter as Python Executable for DA '${interpreter.path[0]}'`);
+
             return this.getExecutableCommand(await resolveEnvironment(interpreter.path[0]));
         }
 
         const prompts = [Interpreters.changePythonInterpreter];
+
         const selection = await showErrorMessage(
             l10n.t(
                 'You need to select a Python interpreter before you start debugging.\n\nTip: click on "Select Interpreter" in the status bar.',
@@ -137,11 +144,15 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
             { modal: true },
             ...prompts,
         );
+
         if (selection === Interpreters.changePythonInterpreter) {
             await executeCommand(Commands.Set_Interpreter);
+
             const interpreter = await getInterpreterDetails(resourceUri);
+
             if (interpreter?.path) {
                 traceVerbose(`Selecting active interpreter as Python Executable for DA '${interpreter.path[0]}'`);
+
                 return this.getExecutableCommand(await resolveEnvironment(interpreter.path[0]));
             }
         }
@@ -150,19 +161,23 @@ export class DebugAdapterDescriptorFactory implements IDebugAdapterDescriptorFac
 
     private async showDeprecatedPythonMessage() {
         sendTelemetryEvent(EventName.DEBUGGER_PYTHON_37_DEPRECATED);
+
         const notificationPromptEnabled = this.persistentState.createGlobalPersistentState(
             debugStateKeys.doNotShowAgain,
             false,
         );
+
         if (notificationPromptEnabled.value) {
             return;
         }
         const prompts = [Interpreters.changePythonInterpreter, Common.doNotShowAgain];
+
         const selection = await showErrorMessage(
             l10n.t('The debugger in the python extension no longer supports python versions minor than 3.8.'),
             { modal: true },
             ...prompts,
         );
+
         if (!selection) {
             return;
         }

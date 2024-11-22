@@ -13,6 +13,7 @@ import { DebugConfigurationState, DebugConfigurationType } from "../../types";
 import { configurePort } from "../utils/configuration";
 
 const defaultHost = "localhost";
+
 const defaultPort = 5678;
 
 export async function buildRemoteAttachConfiguration(
@@ -59,5 +60,6 @@ export async function buildRemoteAttachConfiguration(
 		manuallyEnteredAValue: connect.host !== defaultHost,
 	});
 	Object.assign(state.config, config);
+
 	return (_) => configurePort(input, state.config);
 }

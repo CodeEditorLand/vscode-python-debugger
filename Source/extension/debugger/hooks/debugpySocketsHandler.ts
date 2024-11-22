@@ -28,9 +28,11 @@ export class DebugpySocketsHandler implements IDebugSessionEventHandlers {
 
         if (event.event === DebuggerEvents.DebugpySockets) {
             traceLog("Received 'debugpySockets' event from debugpy.");
+
             let portSocket = event.body.sockets.find((socket: { [x: string]: any }) => {
                 return socket['internal'] === false;
             });
+
             if (portSocket !== undefined) {
                 this.debugPortAttributesProvider.setPortAttribute(portSocket.port);
             }

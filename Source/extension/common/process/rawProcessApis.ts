@@ -25,19 +25,23 @@ function getDefaultOptions<T extends ShellOptions | SpawnOptions>(
 	defaultEnv?: EnvironmentVariables,
 ): T {
 	const defaultOptions = { ...options };
+
 	const execOptions = defaultOptions as SpawnOptions;
+
 	if (execOptions) {
 		execOptions.encoding =
 			typeof execOptions.encoding === "string" &&
 			execOptions.encoding.length > 0
 				? execOptions.encoding
 				: DEFAULT_ENCODING;
+
 		const { encoding } = execOptions;
 		delete execOptions.encoding;
 		execOptions.encoding = encoding;
 	}
 	if (!defaultOptions.env || Object.keys(defaultOptions.env).length === 0) {
 		const env = defaultEnv || process.env;
+
 		defaultOptions.env = { ...env };
 	} else {
 		defaultOptions.env = { ...defaultOptions.env };
@@ -52,6 +56,7 @@ function getDefaultOptions<T extends ShellOptions | SpawnOptions>(
 
 	// Always ensure we have unbuffered output.
 	defaultOptions.env.PYTHONUNBUFFERED = "1";
+
 	if (!defaultOptions.env.PYTHONIOENCODING) {
 		defaultOptions.env.PYTHONIOENCODING = "utf-8";
 	}
@@ -67,13 +72,17 @@ export function plainExec(
 	disposables?: Set<IDisposable>,
 ): Promise<ExecutionResult<string>> {
 	const spawnOptions = getDefaultOptions(options, defaultEnv);
+
 	const encoding = spawnOptions.encoding ? spawnOptions.encoding : "utf8";
+
 	const proc = spawn(file, args, spawnOptions);
 	// Listen to these errors (unhandled errors in streams tears down the process).
 	// Errors will be bubbled up to the `error` event in `proc`, hence no need to log.
 	proc.stdout?.on("error", noop);
 	proc.stderr?.on("error", noop);
+
 	const deferred = createDeferred<ExecutionResult<string>>();
+
 	const disposable: IDisposable = {
 		dispose: () => {
 			if (!proc.killed && !deferred.completed) {
@@ -82,6 +91,7 @@ export function plainExec(
 		},
 	};
 	disposables?.add(disposable);
+
 	const internalDisposables: IDisposable[] = [];
 
 	// eslint-disable-next-line @typescript-eslint/ban-types
@@ -102,6 +112,7 @@ export function plainExec(
 
 	const stdoutBuffers: Buffer[] = [];
 	on(proc.stdout, "data", (data: Buffer) => stdoutBuffers.push(data));
+
 	const stderrBuffers: Buffer[] = [];
 	on(proc.stderr, "data", (data: Buffer) => {
 		if (options.mergeStdOutErr) {
@@ -120,6 +131,7 @@ export function plainExec(
 			stderrBuffers.length === 0
 				? undefined
 				: decodeBuffer(stderrBuffers, encoding);
+
 		if (
 			stderr &&
 			stderr.length > 0 &&
@@ -150,9 +162,12 @@ function filterOutputUsingCondaRunMarkers(stdout: string) {
 	// These markers are added if conda run is used or `interpreterInfo.py` is
 	// run, see `get_output_via_markers.py`.
 	const regex = />>>PYTHON-EXEC-OUTPUT([\s\S]*)<<<PYTHON-EXEC-OUTPUT/;
+
 	const match = stdout.match(regex);
+
 	const filteredOut =
 		match !== null && match.length >= 2 ? match[1].trim() : undefined;
+
 	return filteredOut !== undefined ? filteredOut : stdout;
 }
 

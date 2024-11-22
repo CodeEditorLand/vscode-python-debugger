@@ -19,8 +19,10 @@ export async function parseFile(
 	}
 	const contents = await fs.readFile(filePath).catch((ex) => {
 		traceError("Custom .env is likely not pointing to a valid file", ex);
+
 		return undefined;
 	});
+
 	if (!contents) {
 		return;
 	}
@@ -35,6 +37,7 @@ export function parseFileSync(
 		return;
 	}
 	let contents: string | undefined;
+
 	try {
 		contents = fs.readFileSync(filePath, { encoding: "utf8" });
 	} catch (ex) {
@@ -85,11 +88,13 @@ export function appendPaths(
 		.filter((item) => typeof item === "string" && item.trim().length > 0)
 		.map((item) => item.trim())
 		.join(path.delimiter);
+
 	if (valueToAppend.length === 0) {
 		return vars;
 	}
 
 	const variable = vars ? vars[variableName] : undefined;
+
 	if (variable && typeof variable === "string" && variable.length > 0) {
 		vars[variableName] = variable + path.delimiter + valueToAppend;
 	} else {
@@ -103,17 +108,20 @@ export function parseEnvFile(
 	baseVars?: EnvironmentVariables,
 ): EnvironmentVariables {
 	const globalVars = baseVars ? baseVars : {};
+
 	const vars: EnvironmentVariables = {};
 	lines
 		.toString()
 		.split("\n")
 		.forEach((line, _idx) => {
 			const [name, value] = parseEnvLine(line);
+
 			if (name === "") {
 				return;
 			}
 			vars[name] = substituteEnvVars(value, vars, globalVars);
 		});
+
 	return vars;
 }
 
@@ -123,12 +131,15 @@ function parseEnvLine(line: string): [string, string] {
 	// We don't use dotenv here because it loses ordering, which is
 	// significant for substitution.
 	const match = line.match(/^\s*(_*[a-zA-Z]\w*)\s*=\s*(.*?)?\s*$/);
+
 	if (!match) {
 		return ["", ""];
 	}
 
 	const name = match[1];
+
 	let value = match[2];
+
 	if (value && value !== "") {
 		if (value[0] === "'" && value[value.length - 1] === "'") {
 			value = value.substring(1, value.length - 1);
@@ -156,6 +167,7 @@ function substituteEnvVars(
 	//   https://github.com/motdotla/dotenv-expand/blob/master/lib/main.js
 
 	let invalid = false;
+
 	let replacement = value;
 	replacement = replacement.replace(
 		SUBST_REGEX,
@@ -165,11 +177,13 @@ function substituteEnvVars(
 			}
 			if ((bogus && bogus !== "") || !substName || substName === "") {
 				invalid = true;
+
 				return match;
 			}
 			return localVars[substName] || globalVars[substName] || missing;
 		},
 	);
+
 	if (!invalid && replacement !== value) {
 		value = replacement;
 		sendTelemetryEvent(EventName.ENVFILE_VARIABLE_SUBSTITUTION);

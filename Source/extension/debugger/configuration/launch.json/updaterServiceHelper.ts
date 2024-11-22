@@ -39,8 +39,10 @@ export class LaunchJsonUpdaterServiceHelper {
 		token: CancellationToken,
 	): Promise<void> {
 		const activeTextEditor = getActiveTextEditor();
+
 		if (activeTextEditor && activeTextEditor.document === document) {
 			const folder = getWorkspaceFolder(document.uri);
+
 			const configs = await this.configurationProvider
 				.provideDebugConfigurations!(folder, token);
 
@@ -78,6 +80,7 @@ export class LaunchJsonUpdaterServiceHelper {
 				document,
 				position,
 			);
+
 		if (!cursorPosition) {
 			return;
 		}
@@ -88,12 +91,14 @@ export class LaunchJsonUpdaterServiceHelper {
 			)
 				? "BeforeCursor"
 				: undefined;
+
 		const formattedJson =
 			LaunchJsonUpdaterServiceHelper.getTextForInsertion(
 				config,
 				cursorPosition,
 				commaPosition,
 			);
+
 		const workspaceEdit = new WorkspaceEdit();
 		workspaceEdit.insert(document.uri, position, formattedJson);
 		await applyEdit(workspaceEdit);
@@ -115,6 +120,7 @@ export class LaunchJsonUpdaterServiceHelper {
 		commaPosition?: PositionOfComma,
 	): string {
 		const json = JSON.stringify(config);
+
 		if (cursorPosition === "AfterItem") {
 			// If we already have a comma immediately before the cursor, then no need of adding a comma.
 			return commaPosition === "BeforeCursor" ? json : `,${json}`;
@@ -136,7 +142,9 @@ export class LaunchJsonUpdaterServiceHelper {
 		}
 		const scanner = createScanner(document.getText(), true);
 		scanner.setPosition(document.offsetAt(position));
+
 		const nextToken = scanner.scan();
+
 		if (
 			nextToken === SyntaxKind.CommaToken ||
 			nextToken === SyntaxKind.CloseBracketToken
@@ -156,6 +164,7 @@ export class LaunchJsonUpdaterServiceHelper {
 		}) as {
 			configurations: [];
 		};
+
 		return (
 			!configuration ||
 			!Array.isArray(configuration.configurations) ||
@@ -172,6 +181,7 @@ export class LaunchJsonUpdaterServiceHelper {
 		const currentLine = document.getText(
 			new Range(line.range.start, position),
 		);
+
 		if (currentLine.trim().endsWith(",")) {
 			return true;
 		}
@@ -182,8 +192,10 @@ export class LaunchJsonUpdaterServiceHelper {
 
 		// Keep walking backwards until we hit a non-comma character or a comm character.
 		let startLineNumber = position.line - 1;
+
 		while (startLineNumber > 0) {
 			const lineText = document.lineAt(startLineNumber).text;
+
 			if (lineText.trim().endsWith(",")) {
 				return true;
 			}

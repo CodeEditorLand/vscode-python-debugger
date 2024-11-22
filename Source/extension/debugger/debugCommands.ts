@@ -14,6 +14,7 @@ export async function getDebugConfiguration(
 	const configs = (await getConfigurationsByUri(uri)).filter(
 		(c) => c.request === "launch",
 	);
+
 	for (const config of configs) {
 		if (
 			(config as LaunchRequestArguments).purpose?.includes(
@@ -27,6 +28,7 @@ export async function getDebugConfiguration(
 			// Ensure that the purpose is cleared, this is so we can track if people accidentally
 			// trigger this via F5 or Start with debugger.
 			config.purpose = [];
+
 			return config;
 		}
 	}

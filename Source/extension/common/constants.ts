@@ -5,6 +5,7 @@
 import * as path from "path";
 
 export const PYTHON_LANGUAGE = "python";
+
 const folderName = path.basename(__dirname);
 export const EXTENSION_ROOT_DIR =
 	folderName === "common"
@@ -44,16 +45,26 @@ export function isUnitTestExecution(): boolean {
 
 export namespace Commands {
 	export const Debug_In_Terminal = "debugpy.debugInTerminal";
+
 	export const Debug_Using_Launch_Config = "debugpy.debugUsingLaunchConfig";
+
 	export const TriggerEnvironmentSelection = "debugpy.triggerEnvSelection";
+
 	export const PickLocalProcess = "debugpy.pickLocalProcess";
+
 	export const PickArguments = "debugpy.pickArgs";
+
 	export const ViewOutput = "debugpy.viewOutput";
+
 	export const ClearStorage = "debugpy.clearCacheAndReload";
+
 	export const Enable_SourceMap_Support = "debugpy.enableSourceMapSupport";
+
 	export const SelectDebugConfig =
 		"debugpy.SelectAndInsertDebugConfiguration";
+
 	export const Set_Interpreter = "python.setInterpreter";
+
 	export const ReportIssue = "debugpy.reportIssue";
 }
 

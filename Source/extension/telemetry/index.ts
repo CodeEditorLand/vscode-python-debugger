@@ -22,6 +22,7 @@ import { getTelemetryReporter } from "./reporter";
 function isTelemetrySupported(): boolean {
 	try {
 		const vsc = require("vscode");
+
 		const reporter = require("@vscode/extension-telemetry");
 
 		return vsc !== undefined && reporter !== undefined;
@@ -51,11 +52,14 @@ export function sendTelemetryEvent<
 		return;
 	}
 	const reporter = getTelemetryReporter(telemetryReporter);
+
 	const measures =
 		typeof measuresOrDurationMs === "number"
 			? { duration: measuresOrDurationMs }
 			: measuresOrDurationMs || undefined;
+
 	const customProperties: Record<string, string> = {};
+
 	const eventNameSent = eventName as string;
 
 	if (properties) {
@@ -71,12 +75,17 @@ export function sendTelemetryEvent<
 				switch (typeof data[prop]) {
 					case "string":
 						customProperties[prop] = data[prop];
+
 						break;
+
 					case "object":
 						customProperties[prop] = "object";
+
 						break;
+
 					default:
 						customProperties[prop] = data[prop].toString();
+
 						break;
 				}
 			} catch (exception) {
@@ -190,6 +199,7 @@ export function captureTelemetry<
 				const measures = stopWatch
 					? { duration: stopWatch.elapsedTime }
 					: undefined;
+
 				if (lazyMeasures) {
 					return { ...measures, ...lazyMeasures(this, result) };
 				}
@@ -207,6 +217,7 @@ export function captureTelemetry<
 							getMeasures(data),
 							getProps(data),
 						);
+
 						return data;
 					})
 					.catch((ex) => {
@@ -247,6 +258,7 @@ export function sendTelemetryWhenDone<
 	properties?: P[E],
 ): void {
 	stopWatch = stopWatch || new StopWatch();
+
 	if (typeof promise.then === "function") {
 		(promise as Promise<unknown>).then(
 			(data) => {
@@ -255,6 +267,7 @@ export function sendTelemetryWhenDone<
 					stopWatch!.elapsedTime,
 					properties,
 				);
+
 				return data;
 			},
 			(ex) => {
@@ -264,6 +277,7 @@ export function sendTelemetryWhenDone<
 					properties,
 					ex,
 				);
+
 				return Promise.reject(ex);
 			},
 		);

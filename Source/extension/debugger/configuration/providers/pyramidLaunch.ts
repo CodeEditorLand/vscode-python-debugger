@@ -23,7 +23,9 @@ export async function buildPyramidLaunchConfiguration(
 	state: DebugConfigurationState,
 ): Promise<void> {
 	const iniPath = await getDevelopmentIniPath(state.folder);
+
 	const defaultIni = `${workspaceFolderToken}${path.sep}development.ini`;
+
 	let manuallyEnteredAValue: boolean | undefined;
 
 	const config: Partial<LaunchRequestArguments> = {
@@ -51,6 +53,7 @@ export async function buildPyramidLaunchConfiguration(
 					value,
 				),
 		});
+
 		if (selectedIniPath) {
 			manuallyEnteredAValue = true;
 			config.args = [selectedIniPath];
@@ -76,10 +79,12 @@ export async function validateIniPath(
 		return undefined;
 	}
 	const error = DebugConfigStrings.pyramid.enterDevelopmentIniPath.invalid;
+
 	if (!selected || selected.trim().length === 0) {
 		return error;
 	}
 	const resolvedPath = resolveVariables(selected, undefined, folder);
+
 	if (resolvedPath) {
 		if (selected !== defaultValue && !fs.pathExists(resolvedPath)) {
 			return error;
@@ -101,6 +106,7 @@ export async function getDevelopmentIniPath(
 		folder.uri.fsPath,
 		"development.ini",
 	);
+
 	if (await fs.pathExists(defaultLocationOfManagePy)) {
 		return `${workspaceFolderToken}${path.sep}development.ini`;
 	}

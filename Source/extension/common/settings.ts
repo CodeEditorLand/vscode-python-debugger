@@ -29,13 +29,16 @@ export async function getExtensionSettings(
 	includeInterpreter?: boolean,
 ): Promise<ISettings[]> {
 	const settings: ISettings[] = [];
+
 	const workspaces = getWorkspaceFolders();
+
 	for (const workspace of workspaces) {
 		const workspaceSetting = await getWorkspaceSettings(
 			namespace,
 			workspace,
 			includeInterpreter,
 		);
+
 		settings.push(workspaceSetting);
 	}
 
@@ -48,12 +51,15 @@ function resolveWorkspace(workspace: WorkspaceFolder, value: string): string {
 
 export function getEnvFile(namespace: string, resource: Uri): string {
 	const config = getConfiguration(namespace, resource);
+
 	const envFile = config.get<string>("envFile", "");
+
 	return envFile;
 }
 
 export function getInterpreterFromSetting(namespace: string) {
 	const config = getConfiguration(namespace);
+
 	return config.get<string[]>("interpreter");
 }
 
@@ -65,8 +71,10 @@ export async function getWorkspaceSettings(
 	const config = getConfiguration(namespace, workspace.uri);
 
 	let interpreter: string[] | undefined = [];
+
 	if (includeInterpreter) {
 		interpreter = getInterpreterFromSetting(namespace);
+
 		if (interpreter === undefined || interpreter.length === 0) {
 			interpreter = (await getInterpreterDetails(workspace.uri)).path;
 		}
@@ -79,6 +87,7 @@ export async function getWorkspaceSettings(
 		),
 		envFile: config.get<string>("envFile", ""),
 	};
+
 	return workspaceSetting;
 }
 
@@ -87,7 +96,9 @@ export function checkIfConfigurationChanged(
 	namespace: string,
 ): boolean {
 	const settings = [`${namespace}.interpreter`, `${namespace}.envFile`];
+
 	const changed = settings.map((s) => e.affectsConfiguration(s));
+
 	return changed.includes(true);
 }
 
@@ -96,10 +107,13 @@ function getSettingsUriAndTarget(resource: Uri | undefined): {
 	target: ConfigurationTarget;
 } {
 	const workspaceFolder = resource ? getWorkspaceFolder(resource) : undefined;
+
 	let workspaceFolderUri: Uri | undefined = workspaceFolder
 		? workspaceFolder.uri
 		: undefined;
+
 	const workspaceFolders = getWorkspaceFolders();
+
 	if (
 		!workspaceFolderUri &&
 		Array.isArray(workspaceFolders) &&
@@ -111,6 +125,7 @@ function getSettingsUriAndTarget(resource: Uri | undefined): {
 	const target = workspaceFolderUri
 		? ConfigurationTarget.WorkspaceFolder
 		: ConfigurationTarget.Global;
+
 	return { uri: workspaceFolderUri, target };
 }
 
@@ -125,7 +140,9 @@ export async function updateSetting(
 		uri: resource,
 		target: configTarget || ConfigurationTarget.WorkspaceFolder,
 	};
+
 	let settingsInfo = defaultSetting;
+
 	if (section === "debugpy" && configTarget !== ConfigurationTarget.Global) {
 		settingsInfo = getSettingsUriAndTarget(resource);
 	}
@@ -133,7 +150,9 @@ export async function updateSetting(
 	configTarget = configTarget || settingsInfo.target;
 
 	const configSection = getConfiguration(section, settingsInfo.uri);
+
 	const currentValue = configSection.inspect(setting);
+
 	if (
 		currentValue !== undefined &&
 		((configTarget === ConfigurationTarget.Global &&
@@ -161,14 +180,17 @@ export async function verifySetting(
 ): Promise<void> {
 	if (isTestExecution() && !isUnitTestExecution()) {
 		let retries = 0;
+
 		do {
 			const setting = configSection.inspect(settingName);
+
 			if (!setting && value === undefined) {
 				break; // Both are unset
 			}
 			if (setting && value !== undefined) {
 				// Both specified
 				let actual;
+
 				if (target === ConfigurationTarget.Global) {
 					actual = setting.globalValue;
 				} else if (target === ConfigurationTarget.Workspace) {

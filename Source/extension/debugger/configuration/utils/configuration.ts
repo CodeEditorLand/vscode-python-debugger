@@ -24,6 +24,7 @@ export async function configurePort(
 	config: Partial<AttachRequestArguments>,
 ): Promise<void> {
 	const connect = config.connect || (config.connect = {});
+
 	const port = await input.showInputBox({
 		title: DebugConfigStrings.attach.enterRemotePort.title,
 		step: 2,
@@ -37,6 +38,7 @@ export async function configurePort(
 					: DebugConfigStrings.attach.enterRemotePort.invalid,
 			),
 	});
+
 	if (port && /^\d+$/.test(port.trim())) {
 		connect.port = parseInt(port, 10);
 	}
@@ -59,8 +61,10 @@ async function getPossiblePaths(
 				await workspace.findFiles(pattern),
 		),
 	)) as { status: string; value: [] }[];
+
 	const possiblePaths: Uri[] = [];
 	foundPathsPromises.forEach((result) => possiblePaths.push(...result.value));
+
 	const finalPaths = await asyncFilter(possiblePaths, async (possiblePath) =>
 		regex.exec((await fs.readFile(possiblePath.fsPath)).toString()),
 	);
@@ -75,10 +79,12 @@ export async function getDjangoPaths(
 		return [];
 	}
 	const regExpression = /execute_from_command_line\(/;
+
 	const djangoPaths = await getPossiblePaths(
 		["manage.py", "*/manage.py", "app.py", "*/app.py"],
 		regExpression,
 	);
+
 	return djangoPaths;
 }
 
@@ -87,6 +93,7 @@ export async function getFastApiPaths(folder: WorkspaceFolder | undefined) {
 		return [];
 	}
 	const regExpression = /app\s*=\s*FastAPI\(/;
+
 	const fastApiPaths = await getPossiblePaths(
 		[
 			"main.py",
@@ -108,6 +115,7 @@ export async function getFlaskPaths(folder: WorkspaceFolder | undefined) {
 	}
 	const regExpression =
 		/app(?:lication)?\s*=\s*(?:flask\.)?Flask\(|def\s+(?:create|make)_app\(/;
+
 	const flaskPaths = await getPossiblePaths(
 		[
 			"__init__.py",

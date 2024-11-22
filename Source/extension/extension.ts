@@ -17,9 +17,11 @@ export async function activate(context: IExtensionContext): Promise<IExtensionAp
     try {
         const api = await registerDebugger(context);
         sendTelemetryEvent(EventName.DEBUG_SUCCESS_ACTIVATION);
+
         return api;
     } catch (ex) {
         traceError('sendDebugpySuccessActivationTelemetry() failed.', ex);
+
         throw ex; // re-raise
     }
 }

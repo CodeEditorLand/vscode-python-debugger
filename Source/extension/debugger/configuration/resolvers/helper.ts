@@ -21,10 +21,12 @@ export async function getDebugEnvironmentVariables(
 		args.env && Object.keys(args.env).length > 0
 			? ({ ...args.env } as Record<string, string>)
 			: ({} as Record<string, string>);
+
 	const envFileVars = await envParser.parseFile(
 		args.envFile,
 		debugLaunchEnvVars,
 	);
+
 	const env = envFileVars ? { ...envFileVars } : {};
 
 	// "overwrite: true" to ensure that debug-configuration env variable values
@@ -86,6 +88,7 @@ export async function getDebugEnvironmentVariables(
 
 export function getProgram(): string | undefined {
 	const activeTextEditor = getActiveTextEditor();
+
 	if (
 		activeTextEditor &&
 		activeTextEditor.document.languageId === PYTHON_LANGUAGE

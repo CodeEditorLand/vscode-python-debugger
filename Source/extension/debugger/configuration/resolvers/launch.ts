@@ -43,6 +43,7 @@ export class LaunchConfigurationResolver extends BaseConfigurationResolver<Launc
 		const workspaceFolder =
 			LaunchConfigurationResolver.getWorkspaceFolder(folder);
 		await this.resolveAndUpdatePaths(workspaceFolder, debugConfiguration);
+
 		if (debugConfiguration.clientOS === undefined) {
 			debugConfiguration.clientOS =
 				getOSType() === OSType.Windows ? "windows" : "unix";
@@ -60,6 +61,7 @@ export class LaunchConfigurationResolver extends BaseConfigurationResolver<Launc
 		_token?: CancellationToken,
 	): Promise<LaunchRequestArguments | undefined> {
 		traceLog("Resolving launch configuration with substituted variables");
+
 		const workspaceFolder =
 			LaunchConfigurationResolver.getWorkspaceFolder(folder);
 		await this.provideLaunchDefaults(workspaceFolder, debugConfiguration);
@@ -112,6 +114,7 @@ export class LaunchConfigurationResolver extends BaseConfigurationResolver<Launc
 		}
 		debugConfiguration.showReturnValue =
 			debugConfiguration.showReturnValue !== false;
+
 		if (!debugConfiguration.console) {
 			debugConfiguration.console = "integratedTerminal";
 		}
@@ -135,7 +138,9 @@ export class LaunchConfigurationResolver extends BaseConfigurationResolver<Launc
 		debugConfiguration.workspaceFolder = workspaceFolder
 			? workspaceFolder.fsPath
 			: undefined;
+
 		const debugOptions = debugConfiguration.debugOptions!;
+
 		if (debugConfiguration.stopOnEntry) {
 			LaunchConfigurationResolver.debugOption(
 				debugOptions,
@@ -192,8 +197,10 @@ export class LaunchConfigurationResolver extends BaseConfigurationResolver<Launc
 		}
 		const isFastAPI =
 			LaunchConfigurationResolver.isDebuggingFastAPI(debugConfiguration);
+
 		const isFlask =
 			LaunchConfigurationResolver.isDebuggingFlask(debugConfiguration);
+
 		if (
 			debugConfiguration.autoStartBrowser &&
 			(debugConfiguration.django || isFlask)
@@ -218,6 +225,7 @@ export class LaunchConfigurationResolver extends BaseConfigurationResolver<Launc
 		// (See: https://github.com/microsoft/vscode-python/issues/3568)
 		if (debugConfiguration.pathMappings) {
 			let { pathMappings } = debugConfiguration;
+
 			if (pathMappings.length > 0) {
 				pathMappings = LaunchConfigurationResolver.fixUpPathMappings(
 					pathMappings || [],

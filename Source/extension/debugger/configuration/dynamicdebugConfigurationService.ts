@@ -38,9 +38,11 @@ export class DynamicPythonDebugConfigurationService
 		});
 
 		const djangoManagePaths = await getDjangoPaths(folder);
+
 		const djangoManagePath = djangoManagePaths?.length
 			? path.relative(folder.uri.fsPath, djangoManagePaths[0].fsPath)
 			: null;
+
 		if (djangoManagePath) {
 			providers.push({
 				name: "Python Debugger: Django",
@@ -53,7 +55,9 @@ export class DynamicPythonDebugConfigurationService
 		}
 
 		const flaskPaths = await getFlaskPaths(folder);
+
 		const flaskPath = flaskPaths?.length ? flaskPaths[0].fsPath : null;
+
 		if (flaskPath) {
 			providers.push({
 				name: "Python Debugger: Flask",
@@ -70,7 +74,9 @@ export class DynamicPythonDebugConfigurationService
 		}
 
 		const fastApiPaths = await getFastApiPaths(folder);
+
 		let fastApiPath = fastApiPaths?.length ? fastApiPaths[0].fsPath : null;
+
 		if (fastApiPath) {
 			fastApiPath = replaceAll(
 				path.relative(folder.uri.fsPath, fastApiPath),

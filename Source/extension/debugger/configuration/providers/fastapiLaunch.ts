@@ -20,7 +20,9 @@ export async function buildFastAPILaunchDebugConfiguration(
 	state: DebugConfigurationState,
 ): Promise<void> {
 	const application = await getApplicationPath(state.folder);
+
 	let manuallyEnteredAValue: boolean | undefined;
+
 	const config: Partial<LaunchRequestArguments> = {
 		name: DebugConfigStrings.fastapi.snippet.name,
 		type: DebuggerTypeName,
@@ -43,6 +45,7 @@ export async function buildFastAPILaunchDebugConfiguration(
 								.invalid,
 				),
 		});
+
 		if (selectedPath) {
 			manuallyEnteredAValue = true;
 			config.args = [
@@ -68,6 +71,7 @@ export async function getApplicationPath(
 		return undefined;
 	}
 	const defaultLocationOfManagePy = path.join(folder.uri.fsPath, "main.py");
+
 	if (await fs.pathExists(defaultLocationOfManagePy)) {
 		return "main.py";
 	}

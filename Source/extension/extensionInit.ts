@@ -70,6 +70,7 @@ export async function registerDebugger(
 	context: IExtensionContext,
 ): Promise<IExtensionApi> {
 	const childProcessAttachService = new ChildProcessAttachService();
+
 	const childProcessAttachEventHandler = new ChildProcessAttachEventHandler(
 		childProcessAttachService,
 	);
@@ -79,9 +80,13 @@ export async function registerDebugger(
 			ignoreErrors(childProcessAttachEventHandler.handleCustomEvent(e));
 		}),
 	);
+
 	const attachConfigurationResolver = new AttachConfigurationResolver();
+
 	const launchConfigurationResolver = new LaunchConfigurationResolver();
+
 	const multiStepInputFactory = new MultiStepInputFactory();
+
 	const debugConfigProvider = new PythonDebugConfigurationService(
 		attachConfigurationResolver,
 		launchConfigurationResolver,
@@ -111,12 +116,15 @@ export async function registerDebugger(
 		registerCommand(Commands.Debug_In_Terminal, async (file?: Uri) => {
 			traceLog("Debugging using the editor button 'Debug in terminal'");
 			sendTelemetryEvent(EventName.DEBUG_IN_TERMINAL_BUTTON);
+
 			const interpreter = await getInterpreterDetails(file);
+
 			if (!interpreter.path) {
 				runPythonExtensionCommand(
 					Commands.TriggerEnvironmentSelection,
 					file,
 				).then(noop, noop);
+
 				return;
 			}
 			const config = await getDebugConfiguration(file);
@@ -132,6 +140,7 @@ export async function registerDebugger(
 					"Debugging using the editor button 'Debug using the launch.json'",
 				);
 				sendTelemetryEvent(EventName.DEBUG_USING_LAUNCH_CONFIG_BUTTON);
+
 				const interpreter = await getInterpreterDetails(file);
 
 				if (!interpreter.path) {
@@ -139,13 +148,16 @@ export async function registerDebugger(
 						Commands.TriggerEnvironmentSelection,
 						file,
 					).then(noop, noop);
+
 					return;
 				}
 				const configs = await getConfigurationsByUri(file);
+
 				if (configs.length > 0) {
 					executeCommand("workbench.action.debug.selectandstart");
 				} else {
 					await executeCommand("debug.addConfiguration");
+
 					if (file) {
 						await window.showTextDocument(file);
 					}
@@ -166,6 +178,7 @@ export async function registerDebugger(
 	persistentState.activate();
 
 	const attachProcessProvider = new AttachProcessProvider();
+
 	const attachPicker = new AttachPicker(attachProcessProvider);
 	context.subscriptions.push(
 		registerCommand(Commands.PickLocalProcess, () =>
@@ -184,7 +197,9 @@ export async function registerDebugger(
 	const debugAdapterDescriptorFactory = new DebugAdapterDescriptorFactory(
 		persistentState,
 	);
+
 	const debugSessionLoggingFactory = new DebugSessionLoggingFactory();
+
 	const debuggerPromptFactory = new OutdatedDebuggerPromptFactory();
 	context.subscriptions.push(
 		debug.registerDebugAdapterTrackerFactory(
@@ -211,6 +226,7 @@ export async function registerDebugger(
 				"python",
 				debugSession.workspaceFolder?.uri,
 			)?.terminal.focusAfterLaunch;
+
 			if (shouldTerminalFocusOnStart) {
 				executeCommand("workbench.action.terminal.focus");
 			}
@@ -291,6 +307,7 @@ export async function registerDebugger(
 		"showPythonInlineValues",
 		false,
 	);
+
 	if (showInlineValues) {
 		registerInlineValuesProviderDisposable =
 			languages.registerInlineValuesProvider(
@@ -309,6 +326,7 @@ export async function registerDebugger(
 					const showInlineValues = getConfiguration(
 						"debugpy",
 					).get<boolean>("showPythonInlineValues", false);
+
 					if (!showInlineValues) {
 						registerInlineValuesProviderDisposable.dispose();
 					} else {
@@ -332,6 +350,7 @@ export async function registerDebugger(
 				const v = new DebugVisualization(DebugVisualizers.hexDecoder);
 				v.iconPath = new ThemeIcon("eye");
 				v.visualization = { treeId: "inlineHexDecoder" };
+
 				return [v];
 			},
 		}),

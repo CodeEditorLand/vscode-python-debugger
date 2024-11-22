@@ -63,6 +63,7 @@ export async function pickDjangoPrompt(
 		return;
 	} else if (selection.label === browseFileOption.label) {
 		const uris = await openFileExplorer(state.folder?.uri);
+
 		if (uris && uris.length > 0) {
 			config.program = parseManagePyPath(state.folder, uris[0].fsPath);
 			sendTelemetryEvent(
@@ -108,6 +109,7 @@ export function parseManagePyPath(
 		return djangoPath;
 	}
 	const baseManagePath = path.relative(folder.uri.fsPath, djangoPath);
+
 	if (baseManagePath && !baseManagePath.startsWith("..")) {
 		return `${workspaceFolderToken}${path.sep}${baseManagePath}`;
 	} else {

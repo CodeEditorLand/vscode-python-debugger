@@ -22,15 +22,21 @@ export async function openReportIssue(): Promise<void> {
 		"resources",
 		"report_issue_template.md",
 	);
+
 	const userDataTemplatePath = path.join(
 		EXTENSION_ROOT_DIR,
 		"resources",
 		"report_issue_user_data_template.md",
 	);
+
 	const template = await fs.readFile(templatePath, "utf8");
+
 	const userTemplate = await fs.readFile(userDataTemplatePath, "utf8");
+
 	const interpreterPath = await getActiveEnvironmentPath();
+
 	const interpreter = await resolveEnvironment(interpreterPath);
+
 	const virtualEnvKind = interpreter?.environment?.type || "Unknown";
 
 	const pythonVersion = getRawVersion(interpreter?.version);

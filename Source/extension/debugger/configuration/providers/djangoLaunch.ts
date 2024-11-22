@@ -33,6 +33,7 @@ export async function buildDjangoLaunchDebugConfiguration(
 	};
 
 	let djangoPaths = await getDjangoPaths(state.folder);
+
 	let options: QuickPickType[] = [];
 	//add found paths to options
 	if (djangoPaths.length > 0) {

@@ -24,6 +24,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 		let scopesRequest = await customRequest("scopes", {
 			frameId: context.frameId,
 		});
+
 		let variablesRequest = await customRequest("variables", {
 			variablesReference: scopesRequest.scopes[0].variablesReference,
 		});
@@ -86,6 +87,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 					type: variable.type,
 					variablesReference: variable.variablesReference,
 				};
+
 				return acc;
 			}, {});
 
@@ -96,6 +98,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 		);
 
 		const allValues: InlineValue[] = [];
+
 		for (let l = viewPort.start.line; l <= viewPort.end.line; l++) {
 			const line = document.lineAt(l);
 			// Skip comments
@@ -116,6 +119,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 					continue;
 				}
 				let baseVarName = varName.split(".")[0];
+
 				if (pythonVariables.hasOwnProperty(baseVarName)) {
 					if (varName.includes(".")) {
 						//Find variable name in the variable children
@@ -173,6 +177,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 			}
 		}
 		sendTelemetryEvent(EventName.DEBUGGER_SHOW_PYTHON_INLINE_VALUES);
+
 		return allValues;
 	}
 }
@@ -188,6 +193,7 @@ function removeCharsOutsideBraces(code: string): string {
 		const content = match.slice(1, -1);
 
 		let result = "";
+
 		let tempMatch;
 
 		while ((tempMatch = insideBracesRegex.exec(content)) !== null) {

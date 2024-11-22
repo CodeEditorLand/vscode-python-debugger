@@ -16,12 +16,14 @@ export async function buildModuleLaunchConfiguration(
 	state: DebugConfigurationState,
 ): Promise<void> {
 	let manuallyEnteredAValue: boolean | undefined;
+
 	const config: Partial<LaunchRequestArguments> = {
 		name: DebugConfigStrings.module.snippet.name,
 		type: DebuggerTypeName,
 		request: "launch",
 		module: DebugConfigStrings.module.snippet.default,
 	};
+
 	const selectedModule = await input.showInputBox({
 		title: DebugConfigStrings.module.enterModule.title,
 		value: config.module || DebugConfigStrings.module.enterModule.default,
@@ -33,6 +35,7 @@ export async function buildModuleLaunchConfiguration(
 					: DebugConfigStrings.module.enterModule.invalid,
 			),
 	});
+
 	if (selectedModule) {
 		manuallyEnteredAValue = true;
 		config.module = selectedModule;

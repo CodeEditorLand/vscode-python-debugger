@@ -52,11 +52,13 @@ export class ProtocolParser implements IProtocolParser {
 
 	public on(event: string | symbol, listener: Listener): this {
 		this.events.on(event, listener);
+
 		return this;
 	}
 
 	public once(event: string | symbol, listener: Listener): this {
 		this.events.once(event, listener);
+
 		return this;
 	}
 
@@ -70,6 +72,7 @@ export class ProtocolParser implements IProtocolParser {
 		switch (message.type) {
 			case "event": {
 				const event = message as DebugProtocol.Event;
+
 				if (typeof event.event === "string") {
 					this.events.emit(`${message.type}_${event.event}`, event);
 				}
@@ -77,6 +80,7 @@ export class ProtocolParser implements IProtocolParser {
 			}
 			case "request": {
 				const request = message as DebugProtocol.Request;
+
 				if (typeof request.command === "string") {
 					this.events.emit(
 						`${message.type}_${request.command}`,
@@ -87,6 +91,7 @@ export class ProtocolParser implements IProtocolParser {
 			}
 			case "response": {
 				const response = message as DebugProtocol.Response;
+
 				if (typeof response.command === "string") {
 					this.events.emit(
 						`${message.type}_${response.command}`,
@@ -120,6 +125,7 @@ export class ProtocolParser implements IProtocolParser {
 					);
 					this.rawData = this.rawData.slice(this.contentLength);
 					this.contentLength = -1;
+
 					if (message.length > 0) {
 						this.dispatch(message);
 					}
@@ -129,11 +135,15 @@ export class ProtocolParser implements IProtocolParser {
 				}
 			} else {
 				const idx = this.rawData.indexOf(PROTOCOL_START_INDENTIFIER);
+
 				if (idx !== -1) {
 					const header = this.rawData.toString("utf8", 0, idx);
+
 					const lines = header.split("\r\n");
+
 					for (const line of lines) {
 						const pair = line.split(/: +/);
+
 						if (pair[0] === "Content-Length") {
 							this.contentLength = +pair[1];
 						}

@@ -61,6 +61,7 @@ export async function pickFlaskPrompt(
 		return;
 	} else if (selection.label === browseFileOption.label) {
 		const uris = await openFileExplorer(state.folder?.uri);
+
 		if (uris && uris.length > 0) {
 			config.env!.FLASK_APP = parseFlaskPath(
 				state.folder,
@@ -109,6 +110,7 @@ export function parseFlaskPath(
 		return flaskPath;
 	}
 	const baseManagePath = path.relative(folder.uri.fsPath, flaskPath);
+
 	if (baseManagePath && !baseManagePath.startsWith("..")) {
 		return baseManagePath;
 	} else {

@@ -32,6 +32,7 @@ export class PythonDebugConfigurationService implements IDebugConfigurationServi
         token?: CancellationToken,
     ): Promise<DebugConfiguration[] | undefined> {
         const config: Partial<DebugConfigurationArguments> = {};
+
         const state = { config, folder, token };
 
         const multiStep = this.multiStepFactory.create<DebugConfigurationState>();
@@ -67,6 +68,7 @@ export class PythonDebugConfigurationService implements IDebugConfigurationServi
                     debugConfiguration = cloneDeep(this.cacheDebugConfig);
                 } else {
                     const configs = await this.provideDebugConfigurations(folder, token);
+
                     if (configs === undefined) {
                         return undefined;
                     }
@@ -102,6 +104,7 @@ export class PythonDebugConfigurationService implements IDebugConfigurationServi
         state: DebugConfigurationState,
     ): Promise<InputStep<DebugConfigurationState> | void> {
         type DebugConfigurationQuickPickItem = QuickPickItem & { type: DebugConfigurationType };
+
         const items: DebugConfigurationQuickPickItem[] = [
             {
                 label: DebugConfigStrings.file.selectConfiguration.label,
@@ -149,6 +152,7 @@ export class PythonDebugConfigurationService implements IDebugConfigurationServi
                 description: DebugConfigStrings.pyramid.selectConfiguration.description,
             },
         ];
+
         const debugConfigurations = new Map<
             DebugConfigurationType,
             (
@@ -167,6 +171,7 @@ export class PythonDebugConfigurationService implements IDebugConfigurationServi
         debugConfigurations.set(DebugConfigurationType.launchPyramid, buildPyramidLaunchConfiguration);
 
         state.config = {};
+
         const pick = await input.showQuickPick<
             DebugConfigurationQuickPickItem,
             IQuickPickParameters<DebugConfigurationQuickPickItem>
@@ -176,8 +181,10 @@ export class PythonDebugConfigurationService implements IDebugConfigurationServi
             activeItem: items[0],
             items,
         });
+
         if (pick) {
             const pickedDebugConfiguration = debugConfigurations.get(pick.type)!;
+
             return pickedDebugConfiguration(input, state);
         }
     }

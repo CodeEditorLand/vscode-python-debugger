@@ -25,6 +25,7 @@ export async function buildFlaskLaunchDebugConfiguration(
 	state: DebugConfigurationState,
 ): Promise<void> {
 	let flaskPaths = await getFlaskPaths(state.folder);
+
 	let options: QuickPickType[] = [];
 
 	const config: Partial<LaunchRequestArguments> = {

@@ -20,6 +20,7 @@ export function swallowExceptions(scopeName?: string) {
 		descriptor: TypedPropertyDescriptor<any>,
 	) {
 		const originalMethod = descriptor.value!;
+
 		const errorMessage = `Python Extension (Error in ${scopeName || propertyName}, method:${propertyName}):`;
 
 		descriptor.value = function (...args: any[]) {
@@ -50,6 +51,7 @@ export function swallowExceptions(scopeName?: string) {
 }
 
 type PromiseFunctionWithAnyArgs = (...any: any) => Promise<any>;
+
 const cacheStoreForMethods = getGlobalCacheStore();
 
 /**
@@ -82,16 +84,19 @@ export function cache(
 		descriptor: TypedPropertyDescriptor<PromiseFunctionWithAnyArgs>,
 	) {
 		const originalMethod = descriptor.value!;
+
 		const className =
 			"constructor" in target && target.constructor.name
 				? target.constructor.name
 				: "";
+
 		const keyPrefix = `Cache_Method_Output_${className}.${propertyName}`;
 		descriptor.value = async function (...args: any) {
 			if (isTestExecution()) {
 				return originalMethod.apply(this, args) as Promise<any>;
 			}
 			let key: string;
+
 			try {
 				key = getCacheKeyFromFunctionArgs(keyPrefix, args);
 			} catch (ex) {
@@ -100,14 +105,17 @@ export function cache(
 					keyPrefix,
 					ex,
 				);
+
 				return originalMethod.apply(this, args) as Promise<any>;
 			}
 			const cachedItem = cacheStoreForMethods.get(key);
+
 			if (
 				cachedItem &&
 				(cachedItem.expiry > Date.now() || expiryDurationMs === -1)
 			) {
 				traceVerbose(`Cached data exists ${key}`);
+
 				return Promise.resolve(cachedItem.data);
 			}
 			const expiryMs =
@@ -115,7 +123,9 @@ export function cache(
 				moduleLoadWatch.elapsedTime > extensionStartUpTime
 					? expiryDurationAfterStartUpMs
 					: expiryDurationMs;
+
 			const promise = originalMethod.apply(this, args) as Promise<any>;
+
 			if (cachePromise) {
 				cacheStoreForMethods.set(key, {
 					data: promise,

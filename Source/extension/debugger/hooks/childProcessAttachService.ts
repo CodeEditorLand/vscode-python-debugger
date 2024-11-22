@@ -34,17 +34,21 @@ export class ChildProcessAttachService implements IChildProcessAttachService {
 		parentSession: DebugSession,
 	): Promise<void> {
 		const debugConfig: AttachRequestArguments & DebugConfiguration = data;
+
 		const debugSessionOption: DebugSessionOptions = {
 			parentSession: parentSession,
 			lifecycleManagedByParent: true,
 		};
+
 		const folder = this.getRelatedWorkspaceFolder(debugConfig);
 		traceLog("Start debugger in the attach child proccess");
+
 		const launched = await debug.startDebugging(
 			folder,
 			debugConfig,
 			debugSessionOption,
 		);
+
 		if (!launched) {
 			showErrorMessage(
 				l10n.t(
@@ -61,6 +65,7 @@ export class ChildProcessAttachService implements IChildProcessAttachService {
 		const workspaceFolder = config.workspaceFolder;
 
 		const hasWorkspaceFolders = (getWorkspaceFolders()?.length || 0) > 0;
+
 		if (!hasWorkspaceFolders || !workspaceFolder) {
 			return;
 		}

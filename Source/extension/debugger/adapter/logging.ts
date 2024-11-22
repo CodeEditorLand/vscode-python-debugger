@@ -23,6 +23,7 @@ class DebugSessionLoggingTracker implements DebugAdapterTracker {
 
 	constructor(private readonly session: DebugSession) {
 		this.enabled = this.session.configuration.logToFile as boolean;
+
 		if (this.enabled) {
 			const fileName = `debugger.vscode_${this.session.id}.log`;
 			this.stream = createWriteStream(

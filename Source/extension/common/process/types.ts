@@ -12,6 +12,7 @@ export type SpawnOptions = ChildProcessSpawnOptions & {
 	encoding?: string;
 	token?: CancellationToken;
 	mergeStdOutErr?: boolean;
+
 	throwOnStdErr?: boolean;
 	extraVariables?: NodeJS.ProcessEnv;
 };

@@ -31,6 +31,7 @@ class TelemetryTracker implements DebugAdapterTracker {
 
 	constructor(session: DebugSession) {
 		this.trigger = session.configuration.request as TriggerType;
+
 		const debugConfiguration = session.configuration as Partial<
 			LaunchRequestArguments & AttachRequestArguments
 		>;
@@ -83,6 +84,7 @@ export class DebugSessionTelemetry implements DebugAdapterTrackerFactory {
 		untrustedWorkspace: false,
 		virtualWorkspace: true,
 	};
+
 	constructor() {}
 
 	public createDebugAdapterTracker(

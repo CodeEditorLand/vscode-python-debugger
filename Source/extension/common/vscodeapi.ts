@@ -60,6 +60,7 @@ export function isVirtualWorkspace(): boolean {
 	const isVirtual =
 		workspace.workspaceFolders &&
 		workspace.workspaceFolders.every((f) => f.uri.scheme !== "file");
+
 	return !!isVirtual;
 }
 
@@ -80,6 +81,7 @@ export function registerDocumentFormattingEditProvider(
 
 export function getActiveTextEditor(): TextEditor | undefined {
 	const { activeTextEditor } = window;
+
 	return activeTextEditor;
 }
 

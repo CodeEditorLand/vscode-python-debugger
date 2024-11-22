@@ -26,7 +26,9 @@ export function logProcess(
 				.map((e) => toCommandArgumentForPythonExt(trimQuotes(e)))
 				.join(" ")
 		: fileOrCommand;
+
 	const info = [`> ${getDisplayCommands(command)}`];
+
 	if (options && options.cwd) {
 		info.push(
 			`${Logging.currentWorkingDirectory} ${getDisplayCommands(options.cwd as string)}`,
@@ -40,6 +42,7 @@ export function logProcess(
 
 function getDisplayCommands(command: string): string {
 	const workspaceFolders = getWorkspaceFolders();
+
 	if (workspaceFolders && workspaceFolders.length === 1) {
 		command = replaceMatchesWithCharacter(
 			command,
@@ -48,6 +51,7 @@ function getDisplayCommands(command: string): string {
 		);
 	}
 	const home = getUserHomeDir();
+
 	if (home) {
 		command = replaceMatchesWithCharacter(command, home, "~");
 	}
@@ -66,11 +70,13 @@ function replaceMatchesWithCharacter(
 	// we need to escape using an extra backlash so it's not considered special.
 	function getRegex(match: string) {
 		let pattern = escapeRegExp(match);
+
 		if (getOSType() === OSType.Windows) {
 			// Match both forward and backward slash versions of 'match' for Windows.
 			pattern = replaceAll(pattern, "\\\\", "(\\\\|/)");
 		}
 		let regex = new RegExp(pattern, "ig");
+
 		return regex;
 	}
 
@@ -82,9 +88,12 @@ function replaceMatchesWithCharacter(
 
 	for (let i = 0; i < chunked.length; i++) {
 		let regex = getRegex(match);
+
 		const regexResult = regex.exec(chunked[i]);
+
 		if (regexResult) {
 			const regexIndex = regexResult.index;
+
 			if (
 				regexIndex > 0 &&
 				isPrevioustoMatchRegexALetter(chunked[i], regexIndex - 1)
