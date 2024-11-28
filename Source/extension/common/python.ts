@@ -37,6 +37,7 @@ export interface IInterpreterDetails {
 
 const onDidChangePythonInterpreterEvent =
 	new EventEmitter<IInterpreterDetails>();
+
 export const onDidChangePythonInterpreter: Event<IInterpreterDetails> =
 	onDidChangePythonInterpreterEvent.event;
 async function activateExtension() {

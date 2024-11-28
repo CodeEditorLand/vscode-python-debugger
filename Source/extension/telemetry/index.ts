@@ -248,6 +248,7 @@ export function captureTelemetry<
 }
 
 // function sendTelemetryWhenDone<T extends IDSMappings, K extends keyof T>(eventName: K, properties?: T[K]);
+
 export function sendTelemetryWhenDone<
 	P extends IEventNamePropertyMapping,
 	E extends keyof P,

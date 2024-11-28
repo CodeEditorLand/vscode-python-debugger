@@ -99,6 +99,7 @@ type MultiStepInputInputBoxResponseType<P> =
 	| string
 	| (P extends { buttons: (infer I)[] } ? I : never)
 	| undefined;
+
 export interface IMultiStepInput<S> {
 	run(start: InputStep<S>, state: S): Promise<void>;
 	showQuickPick<T extends QuickPickItem, P extends IQuickPickParameters<T>>({
@@ -377,6 +378,7 @@ export class MultiStepInput<S> implements IMultiStepInput<S> {
 }
 
 export const IMultiStepInputFactory = Symbol("IMultiStepInputFactory");
+
 export interface IMultiStepInputFactory {
 	create<S>(): IMultiStepInput<S>;
 }

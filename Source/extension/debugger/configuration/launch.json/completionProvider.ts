@@ -18,6 +18,7 @@ import {
 import { DebugConfigStrings } from "../../../common/utils/localize";
 
 const configurationNodeName = "configurations";
+
 export enum JsonLanguages {
 	json = "json",
 	jsonWithComments = "jsonc",

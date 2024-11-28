@@ -12,6 +12,7 @@ export interface IDisposable {
 }
 
 export const IDisposableRegistry = Symbol("IDisposableRegistry");
+
 export type IDisposableRegistry = IDisposable[];
 
 export interface IPersistentState<T> {
@@ -40,4 +41,5 @@ export interface IPersistentStateFactory {
 }
 
 export const IExtensionContext = Symbol("ExtensionContext");
+
 export interface IExtensionContext extends ExtensionContext {}

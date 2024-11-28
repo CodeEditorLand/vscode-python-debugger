@@ -13,11 +13,13 @@ import {
 import { AttachRequestArguments } from "../../types";
 
 export const IDebugSessionEventHandlers = Symbol("IDebugSessionEventHandlers");
+
 export interface IDebugSessionEventHandlers {
 	handleCustomEvent?(e: DebugSessionCustomEvent): Promise<void>;
 }
 
 export const IChildProcessAttachService = Symbol("IChildProcessAttachService");
+
 export interface IChildProcessAttachService {
 	attach(
 		data: AttachRequestArguments & DebugConfiguration,
