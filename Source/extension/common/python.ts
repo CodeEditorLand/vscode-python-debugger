@@ -32,6 +32,7 @@ interface IExtensionApi {
 
 export interface IInterpreterDetails {
 	path?: string[];
+
 	resource?: Uri;
 }
 
@@ -48,6 +49,7 @@ async function activateExtension() {
 			await extension.activate();
 		}
 	}
+
 	return extension;
 }
 
@@ -81,6 +83,7 @@ export async function initializePython(
 			);
 
 			traceLog("Waiting for interpreter from python extension.");
+
 			onDidChangePythonInterpreterEvent.fire(
 				await getInterpreterDetails(),
 			);
@@ -139,6 +142,7 @@ export async function getInterpreterDetails(
 	if (environment?.executable.uri) {
 		return { path: [environment?.executable.uri.fsPath], resource };
 	}
+
 	return { path: undefined, resource };
 }
 
@@ -146,6 +150,7 @@ export async function hasInterpreters() {
 	const api = await getPythonExtensionEnviromentAPI();
 
 	const onAddedToCollection = createDeferred();
+
 	api.environments.onDidChangeEnvironments(async () => {
 		if (api.environments.known) {
 			onAddedToCollection.resolve();
@@ -157,6 +162,7 @@ export async function hasInterpreters() {
 	if (initialEnvs.length > 0) {
 		return true;
 	}
+
 	await Promise.race([
 		onAddedToCollection.promise,
 		api?.environments.refreshEnvironments(),

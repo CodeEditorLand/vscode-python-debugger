@@ -56,6 +56,7 @@ export class PersistentState<T> implements IPersistentState<T> {
 			} else {
 				await this.storage.update(this.key, newValue);
 			}
+
 			if (
 				retryOnce &&
 				JSON.stringify(this.value) !== JSON.stringify(newValue)
@@ -68,7 +69,9 @@ export class PersistentState<T> implements IPersistentState<T> {
 					this.key,
 					" retrying by resetting first",
 				);
+
 				await this.updateValue(undefined as any, false);
+
 				await this.updateValue(newValue, false);
 
 				if (JSON.stringify(this.value) !== JSON.stringify(newValue)) {
@@ -102,20 +105,26 @@ export class PersistentStateFactory implements IPersistentStateFactory {
 		untrustedWorkspace: false,
 		virtualWorkspace: true,
 	};
+
 	private globalState: Memento;
+
 	private workspaceState: Memento;
+
 	public readonly _globalKeysStorage: PersistentState<KeysStorage[]>;
 
 	public readonly _workspaceKeysStorage: PersistentState<KeysStorage[]>;
 
 	constructor(globalState: Memento, workspaceState: Memento) {
 		this.globalState = globalState;
+
 		this.workspaceState = workspaceState;
+
 		this._globalKeysStorage = new PersistentState<KeysStorage[]>(
 			this.globalState,
 			GLOBAL_PERSISTENT_KEYS,
 			[],
 		);
+
 		this._workspaceKeysStorage = new PersistentState<KeysStorage[]>(
 			this.workspaceState,
 			WORKSPACE_PERSISTENT_KEYS,
@@ -144,6 +153,7 @@ export class PersistentStateFactory implements IPersistentStateFactory {
 		if (globalKeysStorageDeprecated.value.length > 0) {
 			ignoreErrors(globalKeysStorageDeprecated.updateValue([]));
 		}
+
 		if (workspaceKeysStorageDeprecated.value.length > 0) {
 			ignoreErrors(workspaceKeysStorageDeprecated.updateValue([]));
 		}
@@ -210,19 +220,25 @@ export class PersistentStateFactory implements IPersistentStateFactory {
 				const storage = this.createGlobalPersistentState(
 					keyContent.key,
 				);
+
 				await storage.updateValue(keyContent.defaultValue);
 			}),
 		);
+
 		await Promise.all(
 			this._workspaceKeysStorage.value.map(async (keyContent) => {
 				const storage = this.createWorkspacePersistentState(
 					keyContent.key,
 				);
+
 				await storage.updateValue(keyContent.defaultValue);
 			}),
 		);
+
 		await this._globalKeysStorage.updateValue([]);
+
 		await this._workspaceKeysStorage.updateValue([]);
+
 		executeCommand("workbench.action.reloadWindow").then(noop);
 	}
 }
@@ -257,8 +273,10 @@ export function getGlobalStorage<T>(
 
 	if (!found) {
 		const newValue = [{ key, defaultValue }, ...globalKeysStorage.value];
+
 		ignoreErrors(globalKeysStorage.updateValue(newValue));
 	}
+
 	const raw = new PersistentState<T>(context.globalState, key, defaultValue);
 
 	return {

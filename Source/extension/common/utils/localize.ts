@@ -47,6 +47,7 @@ export namespace DebugConfigStrings {
 			description: l10n.t("Debug the currently active Python file"),
 		};
 	}
+
 	export namespace fileWithArgs {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Current File with Arguments"),
@@ -59,6 +60,7 @@ export namespace DebugConfigStrings {
 			),
 		};
 	}
+
 	export namespace module {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Module"),
@@ -79,6 +81,7 @@ export namespace DebugConfigStrings {
 			invalid: l10n.t("Enter a valid module name"),
 		};
 	}
+
 	export namespace attach {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Remote Attach"),
@@ -103,6 +106,7 @@ export namespace DebugConfigStrings {
 			invalid: l10n.t("Enter a valid port number"),
 		};
 	}
+
 	export namespace attachPid {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Attach using Process Id"),
@@ -113,6 +117,7 @@ export namespace DebugConfigStrings {
 			description: l10n.t("Attach to a local process"),
 		};
 	}
+
 	export namespace django {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Django"),
@@ -130,6 +135,7 @@ export namespace DebugConfigStrings {
 			),
 		};
 	}
+
 	export namespace fastapi {
 		export const snippet = {
 			name: l10n.t("Python Debugger: FastAPI"),
@@ -148,6 +154,7 @@ export namespace DebugConfigStrings {
 			invalid: l10n.t("Enter a valid name"),
 		};
 	}
+
 	export namespace flask {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Flask"),
@@ -171,6 +178,7 @@ export namespace DebugConfigStrings {
 			),
 		};
 	}
+
 	export namespace pyramid {
 		export const snippet = {
 			name: l10n.t("Python Debugger: Pyramid Application"),

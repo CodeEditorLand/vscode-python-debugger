@@ -36,9 +36,12 @@ function getDefaultOptions<T extends ShellOptions | SpawnOptions>(
 				: DEFAULT_ENCODING;
 
 		const { encoding } = execOptions;
+
 		delete execOptions.encoding;
+
 		execOptions.encoding = encoding;
 	}
+
 	if (!defaultOptions.env || Object.keys(defaultOptions.env).length === 0) {
 		const env = defaultEnv || process.env;
 
@@ -79,6 +82,7 @@ export function plainExec(
 	// Listen to these errors (unhandled errors in streams tears down the process).
 	// Errors will be bubbled up to the `error` event in `proc`, hence no need to log.
 	proc.stdout?.on("error", noop);
+
 	proc.stderr?.on("error", noop);
 
 	const deferred = createDeferred<ExecutionResult<string>>();
@@ -90,6 +94,7 @@ export function plainExec(
 			}
 		},
 	};
+
 	disposables?.add(disposable);
 
 	const internalDisposables: IDisposable[] = [];
@@ -111,12 +116,15 @@ export function plainExec(
 	}
 
 	const stdoutBuffers: Buffer[] = [];
+
 	on(proc.stdout, "data", (data: Buffer) => stdoutBuffers.push(data));
 
 	const stderrBuffers: Buffer[] = [];
+
 	on(proc.stderr, "data", (data: Buffer) => {
 		if (options.mergeStdOutErr) {
 			stdoutBuffers.push(data);
+
 			stderrBuffers.push(data);
 		} else {
 			stderrBuffers.push(data);
@@ -127,6 +135,7 @@ export function plainExec(
 		if (deferred.completed) {
 			return;
 		}
+
 		const stderr: string | undefined =
 			stderrBuffers.length === 0
 				? undefined
@@ -145,13 +154,18 @@ export function plainExec(
 			deferred.reject(new StdErrError(stderr));
 		} else {
 			let stdout = decodeBuffer(stdoutBuffers, encoding);
+
 			stdout = filterOutputUsingCondaRunMarkers(stdout);
+
 			deferred.resolve({ stdout, stderr });
 		}
+
 		internalDisposables.forEach((d) => d.dispose());
 	});
+
 	proc.once("error", (ex) => {
 		deferred.reject(ex);
+
 		internalDisposables.forEach((d) => d.dispose());
 	});
 

@@ -37,6 +37,7 @@ export function swallowExceptions(scopeName?: string) {
 						if (isTestExecution()) {
 							return;
 						}
+
 						traceError(errorMessage, error);
 					});
 				}
@@ -44,6 +45,7 @@ export function swallowExceptions(scopeName?: string) {
 				if (isTestExecution()) {
 					return;
 				}
+
 				traceError(errorMessage, error);
 			}
 		};
@@ -91,10 +93,12 @@ export function cache(
 				: "";
 
 		const keyPrefix = `Cache_Method_Output_${className}.${propertyName}`;
+
 		descriptor.value = async function (...args: any) {
 			if (isTestExecution()) {
 				return originalMethod.apply(this, args) as Promise<any>;
 			}
+
 			let key: string;
 
 			try {
@@ -108,6 +112,7 @@ export function cache(
 
 				return originalMethod.apply(this, args) as Promise<any>;
 			}
+
 			const cachedItem = cacheStoreForMethods.get(key);
 
 			if (
@@ -118,6 +123,7 @@ export function cache(
 
 				return Promise.resolve(cachedItem.data);
 			}
+
 			const expiryMs =
 				expiryDurationAfterStartUpMs &&
 				moduleLoadWatch.elapsedTime > extensionStartUpTime
@@ -141,6 +147,7 @@ export function cache(
 					),
 				);
 			}
+
 			return promise;
 		};
 	};

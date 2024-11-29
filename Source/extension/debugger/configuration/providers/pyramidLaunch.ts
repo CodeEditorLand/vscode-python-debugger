@@ -56,6 +56,7 @@ export async function buildPyramidLaunchConfiguration(
 
 		if (selectedIniPath) {
 			manuallyEnteredAValue = true;
+
 			config.args = [selectedIniPath];
 		} else {
 			return;
@@ -67,6 +68,7 @@ export async function buildPyramidLaunchConfiguration(
 		autoDetectedPyramidIniPath: !!iniPath,
 		manuallyEnteredAValue,
 	});
+
 	Object.assign(state.config, config);
 }
 
@@ -78,21 +80,25 @@ export async function validateIniPath(
 	if (!folder) {
 		return undefined;
 	}
+
 	const error = DebugConfigStrings.pyramid.enterDevelopmentIniPath.invalid;
 
 	if (!selected || selected.trim().length === 0) {
 		return error;
 	}
+
 	const resolvedPath = resolveVariables(selected, undefined, folder);
 
 	if (resolvedPath) {
 		if (selected !== defaultValue && !fs.pathExists(resolvedPath)) {
 			return error;
 		}
+
 		if (!resolvedPath.trim().toLowerCase().endsWith(".ini")) {
 			return error;
 		}
 	}
+
 	return undefined;
 }
 
@@ -102,6 +108,7 @@ export async function getDevelopmentIniPath(
 	if (!folder) {
 		return undefined;
 	}
+
 	const defaultLocationOfManagePy = path.join(
 		folder.uri.fsPath,
 		"development.ini",
@@ -110,5 +117,6 @@ export async function getDevelopmentIniPath(
 	if (await fs.pathExists(defaultLocationOfManagePy)) {
 		return `${workspaceFolderToken}${path.sep}development.ini`;
 	}
+
 	return undefined;
 }

@@ -17,6 +17,7 @@ export async function parseFile(
 	if (!filePath || !(await fs.pathExists(filePath))) {
 		return;
 	}
+
 	const contents = await fs.readFile(filePath).catch((ex) => {
 		traceError("Custom .env is likely not pointing to a valid file", ex);
 
@@ -26,6 +27,7 @@ export async function parseFile(
 	if (!contents) {
 		return;
 	}
+
 	return parseEnvFile(contents, baseVars);
 }
 
@@ -36,6 +38,7 @@ export function parseFileSync(
 	if (!filePath || !fs.pathExistsSync(filePath)) {
 		return;
 	}
+
 	let contents: string | undefined;
 
 	try {
@@ -43,9 +46,11 @@ export function parseFileSync(
 	} catch (ex) {
 		traceError("Custom .env is likely not pointing to a valid file", ex);
 	}
+
 	if (!contents) {
 		return;
 	}
+
 	return parseEnvFile(contents, baseVars);
 }
 
@@ -57,11 +62,14 @@ export function mergeVariables(
 	if (!target) {
 		return;
 	}
+
 	const settingsNotToMerge = ["PYTHONPATH", getSearchPathEnvVarNames()[0]];
+
 	Object.keys(source).forEach((setting) => {
 		if (settingsNotToMerge.indexOf(setting) >= 0) {
 			return;
 		}
+
 		if (target[setting] === undefined || options?.overwrite) {
 			target[setting] = source[setting];
 		}
@@ -100,6 +108,7 @@ export function appendPaths(
 	} else {
 		vars[variableName] = valueToAppend;
 	}
+
 	return vars;
 }
 
@@ -110,6 +119,7 @@ export function parseEnvFile(
 	const globalVars = baseVars ? baseVars : {};
 
 	const vars: EnvironmentVariables = {};
+
 	lines
 		.toString()
 		.split("\n")
@@ -119,6 +129,7 @@ export function parseEnvFile(
 			if (name === "") {
 				return;
 			}
+
 			vars[name] = substituteEnvVars(value, vars, globalVars);
 		});
 
@@ -143,9 +154,11 @@ function parseEnvLine(line: string): [string, string] {
 	if (value && value !== "") {
 		if (value[0] === "'" && value[value.length - 1] === "'") {
 			value = value.substring(1, value.length - 1);
+
 			value = value.replace(/\\n/gm, "\n");
 		} else if (value[0] === '"' && value[value.length - 1] === '"') {
 			value = value.substring(1, value.length - 1);
+
 			value = value.replace(/\\n/gm, "\n");
 		}
 	} else {
@@ -169,23 +182,27 @@ function substituteEnvVars(
 	let invalid = false;
 
 	let replacement = value;
+
 	replacement = replacement.replace(
 		SUBST_REGEX,
 		(match, substName, bogus, offset, orig) => {
 			if (offset > 0 && orig[offset - 1] === "\\") {
 				return match;
 			}
+
 			if ((bogus && bogus !== "") || !substName || substName === "") {
 				invalid = true;
 
 				return match;
 			}
+
 			return localVars[substName] || globalVars[substName] || missing;
 		},
 	);
 
 	if (!invalid && replacement !== value) {
 		value = replacement;
+
 		sendTelemetryEvent(EventName.ENVFILE_VARIABLE_SUBSTITUTION);
 	}
 

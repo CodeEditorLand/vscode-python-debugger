@@ -83,6 +83,7 @@ export class DynamicPythonDebugConfigurationService
 				path.sep,
 				".",
 			).replace(".py", "");
+
 			providers.push({
 				name: "Python Debugger: FastAPI",
 				type: DebuggerTypeName,

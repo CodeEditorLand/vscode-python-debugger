@@ -5,11 +5,14 @@ import { QuickPickItem, QuickPickItemKind, Uri } from "vscode";
 
 export interface PathQuickPickItem extends QuickPickItem {
 	filePath: Uri;
+
 	kind?: QuickPickItemKind;
+
 	description: string;
 }
 export interface SeparatorQuickPickItem extends QuickPickItem {
 	label: string;
+
 	kind?: QuickPickItemKind;
 }
 

@@ -50,11 +50,13 @@ function getDisplayCommands(command: string): string {
 			".",
 		);
 	}
+
 	const home = getUserHomeDir();
 
 	if (home) {
 		command = replaceMatchesWithCharacter(command, home, "~");
 	}
+
 	return command;
 }
 
@@ -75,6 +77,7 @@ function replaceMatchesWithCharacter(
 			// Match both forward and backward slash versions of 'match' for Windows.
 			pattern = replaceAll(pattern, "\\\\", "(\\\\|/)");
 		}
+
 		let regex = new RegExp(pattern, "ig");
 
 		return regex;
@@ -100,8 +103,10 @@ function replaceMatchesWithCharacter(
 			) {
 				regex = getRegex(match.substring(1));
 			}
+
 			chunked[i] = chunked[i].replace(regex, character);
 		}
 	}
+
 	return chunked.join(" ");
 }

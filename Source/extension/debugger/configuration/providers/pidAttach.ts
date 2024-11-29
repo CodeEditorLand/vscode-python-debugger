@@ -21,8 +21,10 @@ export async function buildPidAttachConfiguration(
 		request: "attach",
 		processId: "${command:pickProcess}",
 	};
+
 	sendTelemetryEvent(EventName.DEBUGGER_CONFIGURATION_PROMPTS, undefined, {
 		configurationType: DebugConfigurationType.pidAttach,
 	});
+
 	Object.assign(state.config, config);
 }

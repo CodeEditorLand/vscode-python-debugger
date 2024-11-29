@@ -60,10 +60,13 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 			debugConfiguration.clientOS =
 				getOSType() === OSType.Windows ? "windows" : "unix";
 		}
+
 		if (debugConfiguration.consoleName) {
 			debugConfiguration.consoleTitle = debugConfiguration.consoleName;
+
 			delete debugConfiguration.consoleName;
 		}
+
 		return debugConfiguration as T;
 	}
 
@@ -79,6 +82,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 		if (folder) {
 			return folder.uri;
 		}
+
 		const program = getProgram();
 
 		const workspaceFolders = getWorkspaceFolders();
@@ -88,6 +92,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 
 			return program ? Uri.file(path.dirname(program)) : undefined;
 		}
+
 		if (workspaceFolders.length === 1) {
 			traceLog(
 				"Using the only workspaceFolder found: ",
@@ -96,6 +101,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 
 			return workspaceFolders[0].uri;
 		}
+
 		if (program) {
 			const workspaceFolder = getVSCodeWorkspaceFolder(Uri.file(program));
 
@@ -108,6 +114,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 				return workspaceFolder.uri;
 			}
 		}
+
 		return undefined;
 	}
 
@@ -119,6 +126,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 			workspaceFolder,
 			debugConfiguration,
 		);
+
 		await this.resolveAndUpdatePythonPath(
 			workspaceFolder,
 			debugConfiguration,
@@ -132,6 +140,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 		if (!debugConfiguration) {
 			return;
 		}
+
 		if (
 			debugConfiguration.envFile &&
 			(workspaceFolder || debugConfiguration.cwd)
@@ -152,6 +161,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 		if (!debugConfiguration) {
 			return;
 		}
+
 		if (
 			debugConfiguration.pythonPath ===
 				"${command:python.interpreterPath}" ||
@@ -163,6 +173,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 			const interpreterPath = interpreterDetail
 				? interpreterDetail.path
 				: await getSettingsPythonPath(workspaceFolder);
+
 			debugConfiguration.pythonPath = interpreterPath
 				? interpreterPath[0]
 				: interpreterPath;
@@ -185,14 +196,17 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 			const interpreterPath = interpreterDetail.path
 				? interpreterDetail.path
 				: await getSettingsPythonPath(workspaceFolder);
+
 			debugConfiguration.python = interpreterPath
 				? interpreterPath[0]
 				: interpreterPath;
 		} else if (debugConfiguration.python === undefined) {
 			this.pythonPathSource = PythonPathSource.settingsJson;
+
 			debugConfiguration.python = debugConfiguration.pythonPath;
 		} else {
 			this.pythonPathSource = PythonPathSource.launchJson;
+
 			debugConfiguration.python = resolveVariables(
 				debugConfiguration.python ?? debugConfiguration.pythonPath,
 				workspaceFolder?.fsPath,
@@ -208,6 +222,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 			debugConfiguration.debugAdapterPython =
 				debugConfiguration.pythonPath ?? debugConfiguration.python;
 		}
+
 		if (
 			debugConfiguration.debugLauncherPython ===
 				"${command:python.interpreterPath}" ||
@@ -227,6 +242,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 		if (debugOptions.indexOf(debugOption) >= 0) {
 			return;
 		}
+
 		debugOptions.push(debugOption);
 	}
 
@@ -244,6 +260,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 		if (!defaultLocalRoot) {
 			return [];
 		}
+
 		if (!defaultRemoteRoot) {
 			defaultRemoteRoot = defaultLocalRoot;
 		}
@@ -285,6 +302,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 					if (windowsLocalRoot.match(/^[A-Z]:/)) {
 						localRoot = `${windowsLocalRoot[0].toLowerCase()}${windowsLocalRoot.substr(1)}`;
 					}
+
 					return { localRoot, remoteRoot };
 				},
 			);
@@ -358,6 +376,7 @@ export abstract class BaseConfigurationResolver<T extends DebugConfiguration>
 			gevent: name.toLowerCase().indexOf("gevent") >= 0,
 			scrapy: moduleName.toLowerCase() === "scrapy",
 		};
+
 		sendTelemetryEvent(EventName.DEBUGGER, undefined, telemetryProps);
 	}
 }

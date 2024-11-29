@@ -110,7 +110,9 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 
 			for (
 				let match = variableRegex.exec(code);
+
 				match;
+
 				match = variableRegex.exec(code)
 			) {
 				let varName = match[0];
@@ -118,6 +120,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 				if (pythonKeywords.includes(varName)) {
 					continue;
 				}
+
 				let baseVarName = varName.split(".")[0];
 
 				if (pythonVariables.hasOwnProperty(baseVarName)) {
@@ -144,6 +147,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 								l,
 								match.index + varName.length,
 							);
+
 							allValues.push(
 								new InlineValueEvaluatableExpression(
 									rng,
@@ -164,6 +168,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 								l,
 								match.index + varName.length,
 							);
+
 							allValues.push(
 								new InlineValueVariableLookup(
 									rng,
@@ -176,6 +181,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 				}
 			}
 		}
+
 		sendTelemetryEvent(EventName.DEBUGGER_SHOW_PYTHON_INLINE_VALUES);
 
 		return allValues;
@@ -187,6 +193,7 @@ function removeCharsOutsideBraces(code: string): string {
 	const stringRegex = /(["'])(?:(?=(\\?))\2.)*?\1/g;
 
 	//Regular expression to match values inside {}
+
 	const insideBracesRegex = /{[^{}]*}/g;
 
 	return code.replace(stringRegex, (match) => {
@@ -199,6 +206,7 @@ function removeCharsOutsideBraces(code: string): string {
 		while ((tempMatch = insideBracesRegex.exec(content)) !== null) {
 			result += tempMatch[0];
 		}
+
 		const processedContent = result;
 
 		return match[0] + processedContent + match[0];

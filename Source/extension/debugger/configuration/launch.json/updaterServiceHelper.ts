@@ -84,6 +84,7 @@ export class LaunchJsonUpdaterServiceHelper {
 		if (!cursorPosition) {
 			return;
 		}
+
 		const commaPosition =
 			LaunchJsonUpdaterServiceHelper.isCommaImmediatelyBeforeCursor(
 				document,
@@ -100,8 +101,11 @@ export class LaunchJsonUpdaterServiceHelper {
 			);
 
 		const workspaceEdit = new WorkspaceEdit();
+
 		workspaceEdit.insert(document.uri, position, formattedJson);
+
 		await applyEdit(workspaceEdit);
+
 		executeCommand("editor.action.formatDocument").then(noop, noop);
 	}
 
@@ -125,9 +129,11 @@ export class LaunchJsonUpdaterServiceHelper {
 			// If we already have a comma immediately before the cursor, then no need of adding a comma.
 			return commaPosition === "BeforeCursor" ? json : `,${json}`;
 		}
+
 		if (cursorPosition === "BeforeItem") {
 			return `${json},`;
 		}
+
 		return json;
 	}
 
@@ -140,7 +146,9 @@ export class LaunchJsonUpdaterServiceHelper {
 		) {
 			return "InsideEmptyArray";
 		}
+
 		const scanner = createScanner(document.getText(), true);
+
 		scanner.setPosition(document.offsetAt(position));
 
 		const nextToken = scanner.scan();
@@ -151,9 +159,11 @@ export class LaunchJsonUpdaterServiceHelper {
 		) {
 			return "AfterItem";
 		}
+
 		if (nextToken === SyntaxKind.OpenBraceToken) {
 			return "BeforeItem";
 		}
+
 		return undefined;
 	}
 
@@ -203,8 +213,10 @@ export class LaunchJsonUpdaterServiceHelper {
 			if (lineText.trim().length !== 0) {
 				return false;
 			}
+
 			startLineNumber -= 1;
 		}
+
 		return false;
 	}
 }

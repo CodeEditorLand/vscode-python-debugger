@@ -26,7 +26,9 @@ function isResponse(a: any): a is DebugProtocol.Response {
 }
 class TelemetryTracker implements DebugAdapterTracker {
 	private timer = new StopWatch();
+
 	private readonly trigger: TriggerType = "launch";
+
 	private readonly console: ConsoleType | undefined;
 
 	constructor(session: DebugSession) {
@@ -35,6 +37,7 @@ class TelemetryTracker implements DebugAdapterTracker {
 		const debugConfiguration = session.configuration as Partial<
 			LaunchRequestArguments & AttachRequestArguments
 		>;
+
 		this.console = debugConfiguration.console;
 	}
 
@@ -66,11 +69,13 @@ class TelemetryTracker implements DebugAdapterTracker {
 		if (eventName === EventName.DEBUG_SESSION_START) {
 			this.timer.reset();
 		}
+
 		const telemetryProps = {
 			trigger: this.trigger,
 			console: this.console,
 			...properties,
 		};
+
 		sendTelemetryEvent(
 			eventName as keyof IEventNamePropertyMapping,
 			this.timer.elapsedTime,

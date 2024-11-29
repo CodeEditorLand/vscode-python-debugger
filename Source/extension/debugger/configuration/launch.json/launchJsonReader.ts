@@ -29,6 +29,7 @@ export async function getConfigurationsForWorkspace(
 		) {
 			return [];
 		}
+
 		traceLog("Using configuration in workspace");
 
 		return codeWorkspaceConfig.configurations;
@@ -44,9 +45,11 @@ export async function getConfigurationsForWorkspace(
 	if (!parsed.configurations || !Array.isArray(parsed.configurations)) {
 		throw Error("Missing field in launch.json: configurations");
 	}
+
 	if (!parsed.version) {
 		throw Error("Missing field in launch.json: version");
 	}
+
 	traceLog("Using configuration in launch.json");
 
 	return parsed.configurations;
@@ -62,5 +65,6 @@ export async function getConfigurationsByUri(
 			return getConfigurationsForWorkspace(workspace);
 		}
 	}
+
 	return [];
 }

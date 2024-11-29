@@ -13,13 +13,16 @@ export async function activate(
 	context: IExtensionContext,
 ): Promise<IExtensionApi | undefined> {
 	const outputChannel = createOutputChannel("Python Debugger");
+
 	context.subscriptions.push(outputChannel, registerLogger(outputChannel));
+
 	context.subscriptions.push(
 		registerCommand(Commands.ViewOutput, () => outputChannel.show()),
 	);
 
 	try {
 		const api = await registerDebugger(context);
+
 		sendTelemetryEvent(EventName.DEBUG_SUCCESS_ACTIVATION);
 
 		return api;

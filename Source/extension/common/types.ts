@@ -21,7 +21,9 @@ export interface IPersistentState<T> {
 	 * factory to access any type of storage as all storages are tracked there.
 	 */
 	readonly storage: Memento;
+
 	readonly value: T;
+
 	updateValue(value: T): Promise<void>;
 }
 
@@ -33,6 +35,7 @@ export interface IPersistentStateFactory {
 		defaultValue?: T,
 		expiryDurationMs?: number,
 	): IPersistentState<T>;
+
 	createWorkspacePersistentState<T>(
 		key: string,
 		defaultValue?: T,

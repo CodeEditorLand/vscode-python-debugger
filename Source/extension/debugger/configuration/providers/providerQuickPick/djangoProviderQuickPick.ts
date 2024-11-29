@@ -66,6 +66,7 @@ export async function pickDjangoPrompt(
 
 		if (uris && uris.length > 0) {
 			config.program = parseManagePyPath(state.folder, uris[0].fsPath);
+
 			sendTelemetryEvent(
 				EventName.DEBUGGER_CONFIGURATION_PROMPTS,
 				undefined,
@@ -79,6 +80,7 @@ export async function pickDjangoPrompt(
 		}
 	} else if (typeof selection === "string") {
 		config.program = selection;
+
 		sendTelemetryEvent(
 			EventName.DEBUGGER_CONFIGURATION_PROMPTS,
 			undefined,
@@ -89,6 +91,7 @@ export async function pickDjangoPrompt(
 		);
 	} else {
 		config.program = selection.description;
+
 		sendTelemetryEvent(
 			EventName.DEBUGGER_CONFIGURATION_PROMPTS,
 			undefined,
@@ -98,6 +101,7 @@ export async function pickDjangoPrompt(
 			},
 		);
 	}
+
 	Object.assign(state.config, config);
 }
 
@@ -108,6 +112,7 @@ export function parseManagePyPath(
 	if (!folder) {
 		return djangoPath;
 	}
+
 	const baseManagePath = path.relative(folder.uri.fsPath, djangoPath);
 
 	if (baseManagePath && !baseManagePath.startsWith("..")) {

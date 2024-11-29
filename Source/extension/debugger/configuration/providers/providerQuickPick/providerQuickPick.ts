@@ -20,6 +20,7 @@ export async function openFileExplorer(folder: Uri | undefined) {
 	const filtersKey = "Python Files";
 
 	const filtersObject: { [name: string]: string[] } = {};
+
 	filtersObject[filtersKey] = ["py"];
 
 	return await window.showOpenDialog({

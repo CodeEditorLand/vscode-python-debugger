@@ -10,10 +10,13 @@ import { CancellationToken } from "vscode";
 
 export type SpawnOptions = ChildProcessSpawnOptions & {
 	encoding?: string;
+
 	token?: CancellationToken;
+
 	mergeStdOutErr?: boolean;
 
 	throwOnStdErr?: boolean;
+
 	extraVariables?: NodeJS.ProcessEnv;
 };
 
@@ -21,6 +24,7 @@ export type ShellOptions = ExecOptions & { throwOnStdErr?: boolean };
 
 export type ExecutionResult<T extends string | Buffer> = {
 	stdout: T;
+
 	stderr?: T;
 };
 

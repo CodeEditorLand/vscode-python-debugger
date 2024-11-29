@@ -37,6 +37,7 @@ export async function buildRemoteAttachConfiguration(
 	};
 
 	const connect = config.connect!;
+
 	connect.host = await input.showInputBox({
 		title: DebugConfigStrings.attach.enterRemoteHost.title,
 		step: 1,
@@ -59,6 +60,7 @@ export async function buildRemoteAttachConfiguration(
 		configurationType: DebugConfigurationType.remoteAttach,
 		manuallyEnteredAValue: connect.host !== defaultHost,
 	});
+
 	Object.assign(state.config, config);
 
 	return (_) => configurePort(input, state.config);

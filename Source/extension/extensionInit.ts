@@ -92,6 +92,7 @@ export async function registerDebugger(
 		launchConfigurationResolver,
 		multiStepInputFactory,
 	);
+
 	context.subscriptions.push(
 		debug.registerDebugConfigurationProvider(
 			DebuggerTypeName,
@@ -115,6 +116,7 @@ export async function registerDebugger(
 	context.subscriptions.push(
 		registerCommand(Commands.Debug_In_Terminal, async (file?: Uri) => {
 			traceLog("Debugging using the editor button 'Debug in terminal'");
+
 			sendTelemetryEvent(EventName.DEBUG_IN_TERMINAL_BUTTON);
 
 			const interpreter = await getInterpreterDetails(file);
@@ -127,7 +129,9 @@ export async function registerDebugger(
 
 				return;
 			}
+
 			const config = await getDebugConfiguration(file);
+
 			startDebugging(undefined, config);
 		}),
 	);
@@ -139,6 +143,7 @@ export async function registerDebugger(
 				traceLog(
 					"Debugging using the editor button 'Debug using the launch.json'",
 				);
+
 				sendTelemetryEvent(EventName.DEBUG_USING_LAUNCH_CONFIG_BUTTON);
 
 				const interpreter = await getInterpreterDetails(file);
@@ -151,6 +156,7 @@ export async function registerDebugger(
 
 					return;
 				}
+
 				const configs = await getConfigurationsByUri(file);
 
 				if (configs.length > 0) {
@@ -161,6 +167,7 @@ export async function registerDebugger(
 					if (file) {
 						await window.showTextDocument(file);
 					}
+
 					executeCommand(
 						"workbench.action.debug.start",
 						file?.toString(),
@@ -175,16 +182,19 @@ export async function registerDebugger(
 		context.globalState,
 		context.workspaceState,
 	);
+
 	persistentState.activate();
 
 	const attachProcessProvider = new AttachProcessProvider();
 
 	const attachPicker = new AttachPicker(attachProcessProvider);
+
 	context.subscriptions.push(
 		registerCommand(Commands.PickLocalProcess, () =>
 			attachPicker.showQuickPick(),
 		),
 	);
+
 	context.subscriptions.push(
 		registerCommand(Commands.PickArguments, () => {
 			return window.showInputBox({
@@ -201,18 +211,21 @@ export async function registerDebugger(
 	const debugSessionLoggingFactory = new DebugSessionLoggingFactory();
 
 	const debuggerPromptFactory = new OutdatedDebuggerPromptFactory();
+
 	context.subscriptions.push(
 		debug.registerDebugAdapterTrackerFactory(
 			DebuggerTypeName,
 			debugSessionLoggingFactory,
 		),
 	);
+
 	context.subscriptions.push(
 		debug.registerDebugAdapterTrackerFactory(
 			DebuggerTypeName,
 			debuggerPromptFactory,
 		),
 	);
+
 	context.subscriptions.push(
 		debug.registerDebugAdapterDescriptorFactory(
 			DebuggerTypeName,
@@ -243,6 +256,7 @@ export async function registerDebugger(
 	const launchJsonUpdaterServiceHelper = new LaunchJsonUpdaterServiceHelper(
 		debugConfigProvider,
 	);
+
 	context.subscriptions.push(
 		registerCommand(
 			Commands.SelectDebugConfig,
@@ -252,12 +266,14 @@ export async function registerDebugger(
 	);
 
 	const launchJsonCompletionProvider = new LaunchJsonCompletionProvider();
+
 	context.subscriptions.push(
 		languages.registerCompletionItemProvider(
 			{ language: JsonLanguages.json },
 			launchJsonCompletionProvider,
 		),
 	);
+
 	context.subscriptions.push(
 		languages.registerCompletionItemProvider(
 			{ language: JsonLanguages.jsonWithComments },
@@ -266,6 +282,7 @@ export async function registerDebugger(
 	);
 
 	const debugPortAttributesProvider = new DebugPortAttributesProvider();
+
 	context.subscriptions.push(
 		workspace.registerPortAttributesProvider(
 			{
@@ -279,6 +296,7 @@ export async function registerDebugger(
 	const debugpySocketsHandler = new DebugpySocketsHandler(
 		debugPortAttributesProvider,
 	);
+
 	context.subscriptions.push(
 		debug.onDidReceiveDebugSessionCustomEvent((e) => {
 			ignoreErrors(debugpySocketsHandler.handleCustomEvent(e));
@@ -295,7 +313,9 @@ export async function registerDebugger(
 		debug.registerDebugVisualizationTreeProvider<
 			DebugTreeItem & {
 				byte?: number;
+
 				buffer: String;
+
 				context: DebugVisualizationContext;
 			}
 		>("inlineHexDecoder", registerHexDebugVisualizationTreeProvider()),
@@ -314,6 +334,7 @@ export async function registerDebugger(
 				{ language: "python" },
 				new PythonInlineValueProvider(),
 			);
+
 		context.subscriptions.push(registerInlineValuesProviderDisposable);
 	}
 
@@ -335,6 +356,7 @@ export async function registerDebugger(
 								{ language: "python" },
 								new PythonInlineValueProvider(),
 							);
+
 						context.subscriptions.push(
 							registerInlineValuesProviderDisposable,
 						);
@@ -348,7 +370,9 @@ export async function registerDebugger(
 		debug.registerDebugVisualizationProvider("inlineHexDecoder", {
 			provideDebugVisualization(_context, _token) {
 				const v = new DebugVisualization(DebugVisualizers.hexDecoder);
+
 				v.iconPath = new ThemeIcon("eye");
+
 				v.visualization = { treeId: "inlineHexDecoder" };
 
 				return [v];

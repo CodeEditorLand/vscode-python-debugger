@@ -120,9 +120,11 @@ export class DebugAdapterDescriptorFactory
 					configuration.debugAdapterPath,
 					...logArgs,
 				]);
+
 				traceLog(
 					`DAP Server launched with command: ${executable} ${args.join(" ")}`,
 				);
+
 				executable = fileToCommandArgumentForPythonExt(executable);
 
 				return new DebugAdapterExecutable(executable, args);
@@ -137,9 +139,11 @@ export class DebugAdapterDescriptorFactory
 			);
 
 			const args = command.concat([debuggerAdapterPathToUse, ...logArgs]);
+
 			traceLog(
 				`DAP Server launched with command: ${executable} ${args.join(" ")}`,
 			);
+
 			sendTelemetryEvent(
 				EventName.DEBUG_ADAPTER_USING_WHEELS_PATH,
 				undefined,
@@ -216,6 +220,7 @@ export class DebugAdapterDescriptorFactory
 				);
 			}
 		}
+
 		return [];
 	}
 
@@ -231,6 +236,7 @@ export class DebugAdapterDescriptorFactory
 		if (notificationPromptEnabled.value) {
 			return;
 		}
+
 		const prompts = [
 			Interpreters.changePythonInterpreter,
 			Common.doNotShowAgain,
@@ -247,9 +253,11 @@ export class DebugAdapterDescriptorFactory
 		if (!selection) {
 			return;
 		}
+
 		if (selection === Interpreters.changePythonInterpreter) {
 			await runPythonExtensionCommand(Commands.Set_Interpreter);
 		}
+
 		if (selection === Common.doNotShowAgain) {
 			// Never show the message again
 			await this.persistentState
@@ -272,8 +280,10 @@ export class DebugAdapterDescriptorFactory
 			) {
 				this.showDeprecatedPythonMessage();
 			}
+
 			return interpreter.path.length > 0 ? [interpreter.path] : [];
 		}
+
 		return [];
 	}
 }

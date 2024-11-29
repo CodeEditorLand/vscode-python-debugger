@@ -38,6 +38,7 @@ export async function buildModuleLaunchConfiguration(
 
 	if (selectedModule) {
 		manuallyEnteredAValue = true;
+
 		config.module = selectedModule;
 	} else {
 		return;
@@ -47,5 +48,6 @@ export async function buildModuleLaunchConfiguration(
 		configurationType: DebugConfigurationType.launchModule,
 		manuallyEnteredAValue,
 	});
+
 	Object.assign(state.config, config);
 }

@@ -52,6 +52,7 @@ export class AttachProcessProvider implements IAttachProcessProvider {
 						if (aPython && !bPython) {
 							return -1;
 						}
+
 						if (bPython && !aPython) {
 							return 1;
 						}
@@ -94,6 +95,7 @@ export class AttachProcessProvider implements IAttachProcessProvider {
 			{ throwOnStdErr: true },
 			customEnvVars,
 		);
+
 		logProcess(processCmd.command, processCmd.args, {
 			throwOnStdErr: true,
 		});

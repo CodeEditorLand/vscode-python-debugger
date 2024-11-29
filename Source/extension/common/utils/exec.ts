@@ -13,5 +13,6 @@ export function getSearchPathEnvVarNames(
 		// On Windows both are supported now.
 		return ["Path", "PATH"];
 	}
+
 	return ["PATH"];
 }

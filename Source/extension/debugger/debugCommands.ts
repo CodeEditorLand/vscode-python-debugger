@@ -32,6 +32,7 @@ export async function getDebugConfiguration(
 			return config;
 		}
 	}
+
 	return {
 		name: `Debug ${uri ? path.basename(uri.fsPath) : "File"}`,
 		type: DebuggerTypeName,

@@ -54,12 +54,14 @@ export async function buildFlaskLaunchDebugConfiguration(
 		);
 	} else {
 		const managePath = path.join(state?.folder?.uri.fsPath || "", "app.py");
+
 		options.push({
 			label: "Default",
 			description: parseFlaskPath(state.folder, managePath),
 			filePath: Uri.file(managePath),
 		});
 	}
+
 	await input.run(
 		(_input, state) => pickFlaskPrompt(input, state, config, options),
 		state,

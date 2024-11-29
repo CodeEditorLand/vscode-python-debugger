@@ -23,8 +23,10 @@ export async function buildFileWithArgsLaunchDebugConfiguration(
 		console: "integratedTerminal",
 		args: ["${command:pickArgs}"],
 	};
+
 	sendTelemetryEvent(EventName.DEBUGGER_CONFIGURATION_PROMPTS, undefined, {
 		configurationType: DebugConfigurationType.launchFileWithArgs,
 	});
+
 	Object.assign(state.config, config);
 }

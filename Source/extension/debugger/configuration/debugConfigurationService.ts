@@ -58,6 +58,7 @@ export class PythonDebugConfigurationService
 
 		const multiStep =
 			this.multiStepFactory.create<DebugConfigurationState>();
+
 		await multiStep.run(
 			(input, s) =>
 				PythonDebugConfigurationService.pickDebugConfiguration(
@@ -70,6 +71,7 @@ export class PythonDebugConfigurationService
 		if (Object.keys(state.config).length !== 0) {
 			return [state.config as DebugConfiguration];
 		}
+
 		return undefined;
 	}
 
@@ -85,6 +87,7 @@ export class PythonDebugConfigurationService
 				token,
 			);
 		}
+
 		if (debugConfiguration.request === "test") {
 			// `"request": "test"` is now deprecated. But some users might have it in their
 			// launch config. We get here if they triggered it using F5 or start with debugger.
@@ -104,13 +107,16 @@ export class PythonDebugConfigurationService
 					if (configs === undefined) {
 						return undefined;
 					}
+
 					if (Array.isArray(configs) && configs.length === 1) {
 						// eslint-disable-next-line prefer-destructuring
 						debugConfiguration = configs[0];
 					}
+
 					this.cacheDebugConfig = cloneDeep(debugConfiguration);
 				}
 			}
+
 			return this.launchResolver.resolveDebugConfiguration(
 				folder,
 				debugConfiguration as LaunchRequestArguments,
@@ -133,6 +139,7 @@ export class PythonDebugConfigurationService
 				token,
 			);
 		}
+
 		return debugConfiguration.request === "attach"
 			? resolve(this.attachResolver)
 			: resolve(this.launchResolver);
@@ -214,38 +221,47 @@ export class PythonDebugConfigurationService
 				state: DebugConfigurationState,
 			) => Promise<void | InputStep<DebugConfigurationState>>
 		>();
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchDjango,
 			buildDjangoLaunchDebugConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchFastAPI,
 			buildFastAPILaunchDebugConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchFile,
 			buildFileLaunchDebugConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchFileWithArgs,
 			buildFileWithArgsLaunchDebugConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchFlask,
 			buildFlaskLaunchDebugConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchModule,
 			buildModuleLaunchConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.pidAttach,
 			buildPidAttachConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.remoteAttach,
 			buildRemoteAttachConfiguration,
 		);
+
 		debugConfigurations.set(
 			DebugConfigurationType.launchPyramid,
 			buildPyramidLaunchConfiguration,

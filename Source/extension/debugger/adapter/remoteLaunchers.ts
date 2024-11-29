@@ -16,7 +16,9 @@ const pathToDebugger = path.join(pathToPythonLibDir, "debugpy");
 
 type RemoteDebugOptions = {
 	host: string;
+
 	port: number;
+
 	waitUntilDebuggerAttaches: boolean;
 };
 

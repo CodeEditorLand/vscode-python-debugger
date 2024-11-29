@@ -31,6 +31,7 @@ export function clearCache() {
 
 type CacheData<T> = {
 	value: T;
+
 	expiry: number;
 };
 
@@ -41,12 +42,14 @@ export class InMemoryCache<T> {
 	private cacheData?: CacheData<T>;
 
 	constructor(protected readonly expiryDurationMs: number) {}
+
 	public get hasData() {
 		if (!this.cacheData || this.hasExpired(this.cacheData.expiry)) {
 			this.cacheData = undefined;
 
 			return false;
 		}
+
 		return true;
 	}
 	/**
@@ -61,8 +64,10 @@ export class InMemoryCache<T> {
 		if (!this.hasData) {
 			return;
 		}
+
 		return this.cacheData?.value;
 	}
+
 	public set data(value: T | undefined) {
 		if (value !== undefined) {
 			this.cacheData = {
@@ -73,6 +78,7 @@ export class InMemoryCache<T> {
 			this.cacheData = undefined;
 		}
 	}
+
 	public clear() {
 		this.cacheData = undefined;
 	}

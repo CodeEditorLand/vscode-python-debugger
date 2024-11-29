@@ -22,8 +22,10 @@ export async function buildFileLaunchDebugConfiguration(
 		program: "${file}",
 		console: "integratedTerminal",
 	};
+
 	sendTelemetryEvent(EventName.DEBUGGER_CONFIGURATION_PROMPTS, undefined, {
 		configurationType: DebugConfigurationType.launchFastAPI,
 	});
+
 	Object.assign(state.config, config);
 }

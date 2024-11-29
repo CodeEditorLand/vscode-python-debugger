@@ -70,6 +70,7 @@ export class LaunchJsonCompletionProvider implements CompletionItemProvider {
 		if (path.basename(document.uri.fsPath) !== "launch.json") {
 			return false;
 		}
+
 		const location = getLocation(
 			document.getText(),
 			document.offsetAt(position),

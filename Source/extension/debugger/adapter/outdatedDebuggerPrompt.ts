@@ -23,6 +23,7 @@ class OutdatedDebuggerPrompt implements DebugAdapterTracker {
 	public onDidSendMessage(message: DebugProtocol.ProtocolMessage) {
 		if (this.promptCheck.shouldShowPrompt() && this.isPtvsd(message)) {
 			const prompts = [Common.moreInfo];
+
 			showInformationMessage(
 				OutdatedDebugger.outdatedDebuggerMessage,
 				...prompts,
@@ -52,21 +53,25 @@ class OutdatedDebuggerPrompt implements DebugAdapterTracker {
 
 						return true;
 					}
+
 					if (outputMessage.body.output === "debugpy") {
 						this.promptCheck.setShowPrompt(false);
 					}
 				}
 			}
 		}
+
 		return false;
 	}
 }
 
 class OutdatedDebuggerPromptState implements IPromptShowState {
 	private shouldShow: boolean = true;
+
 	public shouldShowPrompt(): boolean {
 		return this.shouldShow;
 	}
+
 	public setShowPrompt(show: boolean) {
 		this.shouldShow = show;
 	}
@@ -80,6 +85,7 @@ export class OutdatedDebuggerPromptFactory
 	constructor() {
 		this.promptCheck = new OutdatedDebuggerPromptState();
 	}
+
 	public createDebugAdapterTracker(
 		_session: DebugSession,
 	): ProviderResult<DebugAdapterTracker> {

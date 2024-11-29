@@ -40,6 +40,7 @@ export async function openReportIssue(): Promise<void> {
 	const virtualEnvKind = interpreter?.environment?.type || "Unknown";
 
 	const pythonVersion = getRawVersion(interpreter?.version);
+
 	await executeCommand("workbench.action.openIssueReporter", {
 		extensionId: "ms-python.debugpy",
 		issueBody: template,
@@ -47,5 +48,6 @@ export async function openReportIssue(): Promise<void> {
 			.replace("{0}", pythonVersion)
 			.replace("{1}", virtualEnvKind),
 	});
+
 	sendTelemetryEvent(EventName.USE_REPORT_ISSUE_COMMAND, undefined, {});
 }

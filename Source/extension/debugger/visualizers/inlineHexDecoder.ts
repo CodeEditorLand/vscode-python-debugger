@@ -21,6 +21,7 @@ export function registerHexDebugVisualizationTreeProvider() {
 		},
 		editItem(item: any, value: string) {
 			item.buffer = `0x${Number(value).toString(16)}`;
+
 			item.description = item.buffer.toString();
 
 			item.context.session.customRequest("setExpression", {

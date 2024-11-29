@@ -42,9 +42,11 @@ export async function configurePort(
 	if (port && /^\d+$/.test(port.trim())) {
 		connect.port = parseInt(port, 10);
 	}
+
 	if (!connect.port) {
 		connect.port = defaultPort;
 	}
+
 	sendTelemetryEvent(EventName.DEBUGGER_CONFIGURATION_PROMPTS, undefined, {
 		configurationType: DebugConfigurationType.remoteAttach,
 		manuallyEnteredAValue: connect.port !== defaultPort,
@@ -63,6 +65,7 @@ async function getPossiblePaths(
 	)) as { status: string; value: [] }[];
 
 	const possiblePaths: Uri[] = [];
+
 	foundPathsPromises.forEach((result) => possiblePaths.push(...result.value));
 
 	const finalPaths = await asyncFilter(possiblePaths, async (possiblePath) =>
@@ -78,6 +81,7 @@ export async function getDjangoPaths(
 	if (!folder) {
 		return [];
 	}
+
 	const regExpression = /execute_from_command_line\(/;
 
 	const djangoPaths = await getPossiblePaths(
@@ -92,6 +96,7 @@ export async function getFastApiPaths(folder: WorkspaceFolder | undefined) {
 	if (!folder) {
 		return [];
 	}
+
 	const regExpression = /app\s*=\s*FastAPI\(/;
 
 	const fastApiPaths = await getPossiblePaths(
@@ -113,6 +118,7 @@ export async function getFlaskPaths(folder: WorkspaceFolder | undefined) {
 	if (!folder) {
 		return [];
 	}
+
 	const regExpression =
 		/app(?:lication)?\s*=\s*(?:flask\.)?Flask\(|def\s+(?:create|make)_app\(/;
 

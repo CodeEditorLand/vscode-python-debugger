@@ -41,12 +41,14 @@ export class ProtocolParser implements IProtocolParser {
 	public dispose(): void {
 		if (this.stream) {
 			this.stream.removeListener("data", this.dataCallbackHandler);
+
 			this.stream = undefined;
 		}
 	}
 
 	public connect(stream: Readable): void {
 		this.stream = stream;
+
 		stream.addListener("data", this.dataCallbackHandler);
 	}
 
@@ -76,8 +78,10 @@ export class ProtocolParser implements IProtocolParser {
 				if (typeof event.event === "string") {
 					this.events.emit(`${message.type}_${event.event}`, event);
 				}
+
 				break;
 			}
+
 			case "request": {
 				const request = message as DebugProtocol.Request;
 
@@ -87,8 +91,10 @@ export class ProtocolParser implements IProtocolParser {
 						request,
 					);
 				}
+
 				break;
 			}
+
 			case "response": {
 				const response = message as DebugProtocol.Response;
 
@@ -98,8 +104,10 @@ export class ProtocolParser implements IProtocolParser {
 						response,
 					);
 				}
+
 				break;
 			}
+
 			default: {
 				this.events.emit(`${message.type}`, message);
 			}
@@ -112,6 +120,7 @@ export class ProtocolParser implements IProtocolParser {
 		if (this.disposed) {
 			return;
 		}
+
 		this.rawData = Buffer.concat([this.rawData, data]);
 
 		// eslint-disable-next-line no-constant-condition
@@ -123,7 +132,9 @@ export class ProtocolParser implements IProtocolParser {
 						0,
 						this.contentLength,
 					);
+
 					this.rawData = this.rawData.slice(this.contentLength);
+
 					this.contentLength = -1;
 
 					if (message.length > 0) {
@@ -148,6 +159,7 @@ export class ProtocolParser implements IProtocolParser {
 							this.contentLength = +pair[1];
 						}
 					}
+
 					this.rawData = this.rawData.slice(
 						idx + PROTOCOL_START_INDENTIFIER.length,
 					);
@@ -155,6 +167,7 @@ export class ProtocolParser implements IProtocolParser {
 					continue;
 				}
 			}
+
 			break;
 		}
 	}

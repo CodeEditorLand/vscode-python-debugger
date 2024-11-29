@@ -41,6 +41,7 @@ export class ChildProcessAttachService implements IChildProcessAttachService {
 		};
 
 		const folder = this.getRelatedWorkspaceFolder(debugConfig);
+
 		traceLog("Start debugger in the attach child proccess");
 
 		const launched = await debug.startDebugging(
@@ -69,6 +70,7 @@ export class ChildProcessAttachService implements IChildProcessAttachService {
 		if (!hasWorkspaceFolders || !workspaceFolder) {
 			return;
 		}
+
 		return getWorkspaceFolders()!.find(
 			(ws) => ws.uri.fsPath === workspaceFolder,
 		);

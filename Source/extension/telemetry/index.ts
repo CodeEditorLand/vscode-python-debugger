@@ -51,6 +51,7 @@ export function sendTelemetryEvent<
 	if (isTestExecution() || !isTelemetrySupported()) {
 		return;
 	}
+
 	const reporter = getTelemetryReporter(telemetryReporter);
 
 	const measures =
@@ -65,10 +66,12 @@ export function sendTelemetryEvent<
 	if (properties) {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const data = properties as any;
+
 		Object.getOwnPropertyNames(data).forEach((prop) => {
 			if (data[prop] === undefined || data[prop] === null) {
 				return;
 			}
+
 			try {
 				// If there are any errors in serializing one property, ignore that and move on.
 				// Else nothing will be sent.
@@ -105,7 +108,9 @@ export function sendTelemetryEvent<
 			errorName: ex.name,
 			errorStack: ex.stack ?? "",
 		};
+
 		Object.assign(customProperties, errorProps);
+
 		reporter.sendTelemetryErrorEvent(
 			eventNameSent,
 			customProperties,
@@ -189,6 +194,7 @@ export function captureTelemetry<
 				if (lazyProperties) {
 					return { ...properties, ...lazyProperties(this, result) };
 				}
+
 				return properties;
 			};
 
@@ -203,6 +209,7 @@ export function captureTelemetry<
 				if (lazyMeasures) {
 					return { ...measures, ...lazyMeasures(this, result) };
 				}
+
 				return measures;
 			};
 
@@ -225,6 +232,7 @@ export function captureTelemetry<
 							...getProps(),
 							failed: true,
 						} as P[E] & FailedEventType;
+
 						sendTelemetryEvent(
 							failureEventName || eventName,
 							getMeasures(),
@@ -408,6 +416,7 @@ export interface IEventNamePropertyMapping {
 		 * @type {ConsoleType}
 		 */
 		console?: ConsoleType;
+
 		error?: Error;
 	};
 	/**

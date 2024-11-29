@@ -17,20 +17,27 @@
 // but we may change it to match the format of sys.version_info.
 export type PythonVersion = {
 	raw: string;
+
 	major: number;
+
 	minor: number;
+
 	patch: number;
 	// Eventually it may be useful to match what sys.version_info
 	// provides for the remainder here:
 	// * releaseLevel: 'alpha' | 'beta' | 'candidate' | 'final';
 	// * serial: number;
+
 	build: string[];
+
 	prerelease: string[];
 };
 
 export type PythonEnvironment = {
 	interpreterPath: string;
+
 	envFolderPath: string;
+
 	version?: string[];
 };
 

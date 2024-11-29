@@ -50,12 +50,14 @@ export async function buildDjangoLaunchDebugConfiguration(
 			state?.folder?.uri.fsPath || "",
 			"manage.py",
 		);
+
 		options.push({
 			label: "Default",
 			description: parseManagePyPath(state.folder, managePath),
 			filePath: Uri.file(managePath),
 		});
 	}
+
 	await input.run(
 		(_input, state) => pickDjangoPrompt(input, state, config, options),
 		state,

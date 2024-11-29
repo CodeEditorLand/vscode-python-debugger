@@ -30,6 +30,7 @@ export class DebugPortAttributesProvider implements PortAttributesProvider {
 		if (this.knownPorts.includes(attributes.port)) {
 			return new PortAttributes(PortAutoForwardAction.Ignore);
 		}
+
 		return undefined;
 	}
 }

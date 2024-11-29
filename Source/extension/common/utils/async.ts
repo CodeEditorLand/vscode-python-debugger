@@ -7,10 +7,15 @@
 
 export interface Deferred<T> {
 	readonly promise: Promise<T>;
+
 	readonly resolved: boolean;
+
 	readonly rejected: boolean;
+
 	readonly completed: boolean;
+
 	resolve(value?: T | PromiseLike<T>): void;
+
 	reject(reason?: string | Error | Record<string, unknown> | unknown): void;
 }
 
@@ -31,17 +36,20 @@ class DeferredImpl<T> implements Deferred<T> {
 	constructor(private scope: any = null) {
 		this._promise = new Promise<T>((res, rej) => {
 			this._resolve = res;
+
 			this._reject = rej;
 		});
 	}
 
 	public resolve(_value: T | PromiseLike<T>) {
 		this._resolve.apply(this.scope ? this.scope : this, [_value]);
+
 		this._resolved = true;
 	}
 
 	public reject(_reason?: string | Error | Record<string, unknown>) {
 		this._reject.apply(this.scope ? this.scope : this, [_reason]);
+
 		this._rejected = true;
 	}
 

@@ -35,6 +35,7 @@ export async function getDebugEnvironmentVariables(
 
 	// Append the PYTHONPATH and PATH variables.
 	envParser.appendPath(env, debugLaunchEnvVars[pathVariableName]);
+
 	envParser.appendPythonPath(env, debugLaunchEnvVars.PYTHONPATH);
 
 	if (
@@ -45,6 +46,7 @@ export async function getDebugEnvironmentVariables(
 		// We need to do this to ensure the PATH variable always has the system PATHs as well.
 		envParser.appendPath(env, process.env[pathVariableName]!);
 	}
+
 	if (typeof env.PYTHONPATH === "string" && env.PYTHONPATH.length > 0) {
 		// We didn't have a value for PATH earlier and now we do.
 		// Now merge this path with the current system path.
@@ -64,6 +66,7 @@ export async function getDebugEnvironmentVariables(
 		) {
 			env[pathVariableName] = process.env[pathVariableName];
 		}
+
 		if (
 			env.PYTHONPATH === undefined &&
 			typeof process.env.PYTHONPATH === "string"
@@ -75,6 +78,7 @@ export async function getDebugEnvironmentVariables(
 	if (!env.hasOwnProperty("PYTHONIOENCODING")) {
 		env.PYTHONIOENCODING = "UTF-8";
 	}
+
 	if (!env.hasOwnProperty("PYTHONUNBUFFERED")) {
 		env.PYTHONUNBUFFERED = "1";
 	}
@@ -95,5 +99,6 @@ export function getProgram(): string | undefined {
 	) {
 		return activeTextEditor.document.fileName;
 	}
+
 	return undefined;
 }

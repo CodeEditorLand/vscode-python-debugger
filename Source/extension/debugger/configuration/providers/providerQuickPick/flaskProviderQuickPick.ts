@@ -67,6 +67,7 @@ export async function pickFlaskPrompt(
 				state.folder,
 				uris[0].fsPath,
 			);
+
 			sendTelemetryEvent(
 				EventName.DEBUGGER_CONFIGURATION_PROMPTS,
 				undefined,
@@ -80,6 +81,7 @@ export async function pickFlaskPrompt(
 		}
 	} else if (typeof selection === "string") {
 		config.env!.FLASK_APP = selection;
+
 		sendTelemetryEvent(
 			EventName.DEBUGGER_CONFIGURATION_PROMPTS,
 			undefined,
@@ -90,6 +92,7 @@ export async function pickFlaskPrompt(
 		);
 	} else {
 		config.env!.FLASK_APP = selection.description;
+
 		sendTelemetryEvent(
 			EventName.DEBUGGER_CONFIGURATION_PROMPTS,
 			undefined,
@@ -99,6 +102,7 @@ export async function pickFlaskPrompt(
 			},
 		);
 	}
+
 	Object.assign(state.config, config);
 }
 
@@ -109,6 +113,7 @@ export function parseFlaskPath(
 	if (!folder) {
 		return flaskPath;
 	}
+
 	const baseManagePath = path.relative(folder.uri.fsPath, flaskPath);
 
 	if (baseManagePath && !baseManagePath.startsWith("..")) {

@@ -48,6 +48,7 @@ export async function buildFastAPILaunchDebugConfiguration(
 
 		if (selectedPath) {
 			manuallyEnteredAValue = true;
+
 			config.args = [
 				`${path.basename(selectedPath, ".py").replace("/", ".")}:app`,
 				"--reload",
@@ -62,6 +63,7 @@ export async function buildFastAPILaunchDebugConfiguration(
 		autoDetectedFastAPIMainPyPath: !!application,
 		manuallyEnteredAValue,
 	});
+
 	Object.assign(state.config, config);
 }
 export async function getApplicationPath(
@@ -70,10 +72,12 @@ export async function getApplicationPath(
 	if (!folder) {
 		return undefined;
 	}
+
 	const defaultLocationOfManagePy = path.join(folder.uri.fsPath, "main.py");
 
 	if (await fs.pathExists(defaultLocationOfManagePy)) {
 		return "main.py";
 	}
+
 	return undefined;
 }

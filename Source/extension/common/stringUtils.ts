@@ -32,6 +32,7 @@ export function trimQuotes(source: string): string {
 	if (!source) {
 		return source;
 	}
+
 	return source.replace(/(^['"])|(['"]$)/g, "");
 }
 
@@ -44,6 +45,7 @@ export function toCommandArgumentForPythonExt(source: string): string {
 	if (!source) {
 		return source;
 	}
+
 	return (source.indexOf(" ") >= 0 ||
 		source.indexOf("&") >= 0 ||
 		source.indexOf("(") >= 0 ||
@@ -62,5 +64,6 @@ export function fileToCommandArgumentForPythonExt(source: string): string {
 	if (!source) {
 		return source;
 	}
+
 	return toCommandArgumentForPythonExt(source).replace(/\\/g, "/");
 }

@@ -20,7 +20,9 @@ import {
 
 export interface ISettings {
 	workspace: string;
+
 	interpreter: string[];
+
 	envFile?: string;
 }
 
@@ -104,6 +106,7 @@ export function checkIfConfigurationChanged(
 
 function getSettingsUriAndTarget(resource: Uri | undefined): {
 	uri: Uri | undefined;
+
 	target: ConfigurationTarget;
 } {
 	const workspaceFolder = resource ? getWorkspaceFolder(resource) : undefined;
@@ -164,7 +167,9 @@ export async function updateSetting(
 	) {
 		return;
 	}
+
 	await configSection.update(setting, value, configTarget);
+
 	await verifySetting(configSection, configTarget, setting, value);
 }
 
@@ -187,6 +192,7 @@ export async function verifySetting(
 			if (!setting && value === undefined) {
 				break; // Both are unset
 			}
+
 			if (setting && value !== undefined) {
 				// Both specified
 				let actual;
@@ -198,12 +204,14 @@ export async function verifySetting(
 				} else {
 					actual = setting.workspaceFolderValue;
 				}
+
 				if (actual === value) {
 					break;
 				}
 			}
 			// Wait for settings to get refreshed.
 			await new Promise((resolve) => setTimeout(resolve, 250));
+
 			retries += 1;
 		} while (retries < 20);
 	}
@@ -213,5 +221,6 @@ export function getRawVersion(version: VersionInfo | undefined) {
 	if (version) {
 		return `${version.major}.${version.minor}.${version.micro}`;
 	}
+
 	return ``;
 }

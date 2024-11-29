@@ -30,7 +30,9 @@ export interface IDynamicDebugConfigurationService
 
 export type DebugConfigurationState = {
 	config: Partial<DebugConfigurationArguments>;
+
 	folder?: WorkspaceFolder;
+
 	token?: CancellationToken;
 };
 
@@ -76,6 +78,8 @@ export const IProtocolParser = Symbol("IProtocolParser");
 
 export interface IProtocolParser extends Disposable {
 	connect(stream: Readable): void;
+
 	once(event: string | symbol, listener: (...args: unknown[]) => void): this;
+
 	on(event: string | symbol, listener: (...args: unknown[]) => void): this;
 }
