@@ -110,9 +110,7 @@ export class PythonInlineValueProvider implements InlineValuesProvider {
 
 			for (
 				let match = variableRegex.exec(code);
-
 				match;
-
 				match = variableRegex.exec(code)
 			) {
 				let varName = match[0];
