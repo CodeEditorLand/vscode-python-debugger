@@ -534,10 +534,10 @@
 		"@types/sinon": "17.0.3",
 		"chai": "5.1.2",
 		"chai-as-promised": "8.0.1",
-		"glob": "11.0.0",
+		"glob": "11.0.1",
 		"semver": "7.6.3",
 		"sinon": "19.0.2",
-		"ts-loader": "9.5.1",
+		"ts-loader": "9.5.2",
 		"ts-mockito": "2.6.1",
 		"typemoq": "2.1.0"
 	},
